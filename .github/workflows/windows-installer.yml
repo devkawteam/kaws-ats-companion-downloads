@@ -1,0 +1,59 @@
+name: Self-contained Windows installer
+
+on:
+  push:
+    branches: [companion-v1.7.1-cb-relay-fix]
+    paths: [.github/workflows/windows-installer.yml, native-release-notes.md]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: companion-native-v1.7.2
+  cancel-in-progress: false
+
+jobs:
+  build-test-release:
+    runs-on: windows-2022
+    timeout-minutes: 35
+    steps:
+      - name: Checkout release instructions
+        uses: actions/checkout@v4
+      - name: Checkout exact Companion source
+        uses: actions/checkout@v4
+        with:
+          repository: devkawteam/kaws-ats-playground
+          ref: cc3ed9e72203517b1a7640ff2dffdc70d5cb17c7
+          path: source
+      - name: Install build Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Ensure Inno Setup is available
+        shell: pwsh
+        run: |
+          $compiler = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+          if (!(Test-Path $compiler)) {
+            choco install innosetup --version=6.4.3 --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw 'Inno Setup installation failed.' }
+          }
+      - name: Build private runtime and Windows installer
+        shell: pwsh
+        run: ./source/installer/build-windows.ps1 -BuildRoot "$env:RUNNER_TEMP\kaw-build" -Output "$env:GITHUB_WORKSPACE\dist"
+      - name: Test actual installer without system development tools
+        shell: pwsh
+        run: ./source/installer/test-native-installer.ps1 -Setup ./dist/KAW-ATS-Companion-Setup-v1.7.2.exe -TestRoot "$env:RUNNER_TEMP\kaw-installed-smoke"
+      - name: Retain verified installer and build provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: companion-v1.7.2-windows-x64
+          path: dist/*
+          if-no-files-found: error
+      - name: Publish tested Windows installer
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.7.2 ./dist/KAW-ATS-Companion-Setup-v1.7.2.exe ./dist/KAW-ATS-Companion-Setup-v1.7.2.exe.sha256.txt ./dist/build-manifest.json --repo "$env:GITHUB_REPOSITORY" --target "${{ github.sha }}" --title "Companion v1.7.2 — self-contained Windows installer" --notes-file native-release-notes.md --latest
+          if ($LASTEXITCODE -ne 0) { throw 'Publishing the verified installer failed.' }
