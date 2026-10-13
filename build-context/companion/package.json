@@ -1,0 +1,19 @@
+{
+  "name": "ats-playground-companion",
+  "version": "1.7.2",
+  "private": true,
+  "description": "KAW'S ATS Playground Companion: live dashboard, geographic navigation, driver alerts, dispatch, career, earnings, convoy pre-flight and Discord trip summaries",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "doctor": "node src/doctor.js",
+    "probe": "node src/probe.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "trucksim-telemetry": "1.0.0"
+  }
+}

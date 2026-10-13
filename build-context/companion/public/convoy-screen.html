@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050b12">
+<title>KAW Convoy Screen</title>
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<style>
+  :root { --text:#f4f8ff; --muted:#a9c0d8; --blue:#27d7ff; --green:#3ee07a; --yellow:#ffca3a; --red:#ff5f57; --card:rgba(6,14,24,.86) }
+  html, body { margin:0; height:100%; background:#050b12; color:var(--text); font-family:"Segoe UI",system-ui,Arial,sans-serif }
+  #map { position:fixed; inset:0 }
+  .bar { position:fixed; left:10px; right:10px; z-index:500; background:var(--card); border-radius:14px; padding:10px 12px; box-shadow:0 6px 24px rgba(0,0,0,.4) }
+  #top { top:calc(10px + env(safe-area-inset-top)) } #bottom { bottom:calc(10px + env(safe-area-inset-bottom)); max-height:38vh; overflow:auto }
+  #top b { font-size:16px } .msg { margin-top:6px; font-size:14px; line-height:1.4 } .warn { color:var(--yellow) } .crit { color:var(--red) } .tip { color:var(--blue) }
+  .drv { display:flex; justify-content:space-between; gap:8px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.08); font-size:15px }
+  .drv:last-child { border-bottom:0 } .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px }
+  .btns { display:flex; gap:6px; margin-top:6px } button { background:#16324a; color:var(--text); border:0; border-radius:10px; padding:8px 10px; font-size:14px }
+  .truck { width:16px; height:16px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 2px rgba(0,0,0,.4) }
+  .lbl { font-size:12px; font-weight:700; color:#fff; text-shadow:0 1px 3px #000; white-space:nowrap; margin-left:18px; margin-top:-16px }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="bar" id="top"><b>KAW Convoy</b> <span id="status" style="color:var(--muted);font-size:13px">connecting…</span><div id="msgs"></div></div>
+<div class="bar" id="bottom"><div id="drivers">Waiting for the Companion…</div>
+  <div class="btns"><button id="fit" type="button">Whole convoy</button><button id="follow" type="button">Follow me</button><button id="wake" type="button">Keep screen on</button></div></div>
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script>
+  // Convoy-only screen for a phone or tablet beside the wheel. Read-only: uses /api/telemetry (allowed for
+  // paired devices). Author: Kaw.
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const map = L.map('map', { zoomControl: false, attributionControl: true }).setView([38.5, -112], 6);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, attribution: 'Tiles &copy; Esri' }).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16 }).addTo(map);
+  const layer = L.layerGroup().addTo(map);
+  const COL = { green: '#3ee07a', yellow: '#ffca3a', red: '#ff5f57', leader: '#27d7ff' };
+  let mode = 'fit', fitAt = 0, moved = false;
+  map.on('dragstart', () => { moved = true; });
+  document.getElementById('fit').onclick = () => { mode = 'fit'; moved = false; fitAt = 0; };
+  document.getElementById('follow').onclick = () => { mode = 'follow'; moved = false; };
+  let lock = null;
+  document.getElementById('wake').onclick = async () => {
+    try { lock = await navigator.wakeLock.request('screen'); document.getElementById('wake').textContent = 'Screen stays on'; }
+    catch { document.getElementById('wake').textContent = 'Not supported here'; }
+  };
+  const icon = (color, label) => L.divIcon({ className: '', iconSize: [16, 16], iconAnchor: [8, 8], html: `<div class="truck" style="background:${color}"></div><div class="lbl">${esc(label)}</div>` });
+
+  async function tick() {
+    let d;
+    try { const r = await fetch('/api/telemetry', { cache: 'no-store' }); if (r.status === 403) throw new Error('pair'); d = await r.json(); }
+    catch (e) { document.getElementById('status').textContent = e.message === 'pair' ? 'Pair this device first: Companion → Devices & Screens → scan the QR.' : 'Companion not reachable…'; return; }
+    const tg = d.together || {};
+    document.getElementById('status').textContent = `${(d.mapMates || []).length + 1} in view${tg.leader ? ` · leader ${tg.leader}` : ''}`;
+    const msgs = [];
+    if (tg.catchUp) msgs.push(`<div class="msg tip">${esc(tg.catchUp.text)}</div>`);
+    for (const l of tg.lost || []) msgs.push(`<div class="msg warn">📡 ${esc(l.driverName)} dropped out${l.near ? ` near ${esc(l.near)}` : ''}</div>`);
+    for (const w of tg.wrongTurns || []) msgs.push(`<div class="msg warn">↩ ${esc(w.driverName)} may have taken a wrong turn</div>`);
+    if (tg.regroup) msgs.push(`<div class="msg">📍 Regroup: <b>${esc(tg.regroup.name)}</b>${tg.regroup.miles != null ? ` · ${tg.regroup.miles} mi` : ''}</div>`);
+    if (tg.rollCall) msgs.push(`<div class="msg">📋 Roll call: ${tg.rollCall.readyCount}/${tg.rollCall.total} ready</div>`);
+    for (const a of (d.alerts?.active || []).filter(a => a.severity === 'critical').slice(0, 2)) msgs.push(`<div class="msg crit">⚠ ${esc(a.title)}</div>`);
+    document.getElementById('msgs').innerHTML = msgs.join('');
+
+    layer.clearLayers();
+    const pts = [];
+    const line = Array.isArray(tg.line) ? tg.line : [];
+    for (let i = 1; i < line.length; i++) L.polyline([[line[i - 1].lat, line[i - 1].lon], [line[i].lat, line[i].lon]], { color: COL[line[i].color] || '#fff', weight: 6, opacity: .85 }).addTo(layer);
+    const leaderName = tg.leader;
+    for (const m of d.mapMates || []) { pts.push([m.lat, m.lon]); L.marker([m.lat, m.lon], { icon: icon(m.driverName === leaderName ? COL.leader : '#ffca3a', m.driverName) }).addTo(layer); }
+    const me = d.geo && Number.isFinite(d.geo.lat) ? [d.geo.lat, d.geo.lon] : null;
+    if (me) { pts.push(me); L.marker(me, { icon: icon('#3ee07a', 'You'), zIndexOffset: 1000 }).addTo(layer); }
+    if (tg.regroup) { pts.push([tg.regroup.lat, tg.regroup.lon]); L.marker([tg.regroup.lat, tg.regroup.lon], { icon: icon('#ff5f57', 'Regroup') }).addTo(layer); }
+    if (!moved) {
+      if (mode === 'follow' && me) map.setView(me, Math.max(map.getZoom(), 11));
+      else if (pts.length > 1 && Date.now() - fitAt > 8000) { fitAt = Date.now(); map.fitBounds(pts, { padding: [70, 70], maxZoom: 12 }); }
+      else if (pts.length === 1 && Date.now() - fitAt > 8000) { fitAt = Date.now(); map.setView(pts[0], 10); }
+    }
+
+    const rows = [];
+    const byName = new Map(line.map(x => [x.driverName, x]));
+    rows.push(`<div class="drv"><span><span class="dot" style="background:#3ee07a"></span><b>You</b></span><span>${Math.round(d.truck?.speedMph || 0)} mph</span></div>`);
+    for (const m of d.mapMates || []) {
+      const l = byName.get(m.driverName);
+      rows.push(`<div class="drv"><span><span class="dot" style="background:${m.driverName === leaderName ? COL.leader : COL[l?.color] || '#ffca3a'}"></span>${esc(m.driverName)}${m.driverName === leaderName ? ' (leader)' : ''}</span><span>${m.speedMph != null ? Math.round(m.speedMph) + ' mph' : ''}${l?.gapMiles != null ? ` · gap ${l.gapMiles} mi` : ''}${m.near ? ` · ${esc(m.near)}` : ''}</span></div>`);
+    }
+    if (!(d.mapMates || []).length) rows.push('<div class="drv" style="color:var(--muted)">No other convoy drivers on the map yet.</div>');
+    document.getElementById('drivers').innerHTML = rows.join('');
+  }
+  tick(); setInterval(tick, 2000);
+  document.addEventListener('visibilitychange', async () => { if (lock && document.visibilityState === 'visible') try { lock = await navigator.wakeLock.request('screen'); } catch {} });
+</script>
+</body>
+</html>

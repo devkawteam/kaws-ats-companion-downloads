@@ -1,0 +1,57 @@
+{
+  "name": "KAW'S ATS Playground Live Companion",
+  "short_name": "KAW ATS",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "scope": "/",
+  "background_color": "#020812",
+  "theme_color": "#020812",
+  "description": "Responsive ATS telemetry, convoy, driver coach and Companion CB radio dashboard",
+  "shortcuts": [
+    {
+      "name": "Drive Dashboard",
+      "short_name": "Drive",
+      "url": "/?page=drive"
+    },
+    {
+      "name": "Second Screen",
+      "short_name": "HUD",
+      "url": "/?mode=hud"
+    },
+    {
+      "name": "Stream Deck",
+      "short_name": "Deck",
+      "url": "/streamdeck.html"
+    },
+    {
+      "name": "Companion CB",
+      "short_name": "CB Radio",
+      "url": "/?page=radio"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

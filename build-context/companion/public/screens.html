@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KAW Stream Screens</title>
+<!-- Full-screen stream scenes for OBS / Streamlabs (Browser Source, 1920x1080 or 1080x1920):
+     screens.html?screen=starting|brb|ending  &minutes=5 (countdown)  &title=Custom headline
+     &map=atsgame|dark|satellite (background map)  &layout=vertical  -->
+<style>
+  :root{--text:#f4f8ff;--muted:#a9c0d8;--blue:#4aa3ff;--green:#3ee07a;--yellow:#ffd257;--card:rgba(6,14,24,.72);--line:rgba(120,170,230,.3)}
+  html,body{margin:0;height:100%;background:#050b12;color:var(--text);font-family:"Segoe UI Variable Display","Segoe UI",system-ui,Arial,sans-serif;overflow:hidden}
+  #bg{position:fixed;inset:0;filter:saturate(1.15) brightness(.85)}
+  .shade{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(5,11,18,.2),rgba(5,11,18,.7) 70%),linear-gradient(180deg,rgba(5,11,18,.2),rgba(5,11,18,.8))}
+  .wrap{position:fixed;inset:0;display:grid;grid-template-columns:1.25fr 1fr;gap:48px;padding:72px 80px;box-sizing:border-box}
+  body.vertical .wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;padding:90px 60px;gap:36px}
+  .brand{font-size:18px;letter-spacing:.3em;color:var(--muted);font-weight:700;text-transform:uppercase}
+  h1{font-size:108px;line-height:.95;margin:18px 0 10px;font-weight:900;letter-spacing:-.02em;text-shadow:0 8px 40px rgba(0,0,0,.6)}
+  body.vertical h1{font-size:96px}
+  .sub{font-size:28px;color:var(--muted);font-weight:600}
+  .timer{font-size:120px;font-weight:900;margin-top:28px;font-feature-settings:"tnum" 1;color:var(--yellow);text-shadow:0 0 40px rgba(255,210,87,.35)}
+  .col{display:flex;flex-direction:column;gap:18px;justify-content:center}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px 26px;backdrop-filter:blur(10px)}
+  .k{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800}
+  .big{font-size:34px;font-weight:800;margin-top:6px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .stats div b{display:block;font-size:40px;font-weight:900}.stats div span{color:var(--muted);font-size:15px;font-weight:700}
+  .row{display:flex;justify-content:space-between;font-size:20px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .row:last-child{border-bottom:0}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:10px}
+  .cmds{font-size:20px;color:var(--muted);line-height:1.6}.cmds b{color:var(--text)}
+  .feed .row{font-size:18px}
+  .hidden{display:none!important}
+</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+</head>
+<body>
+<div id="bg"></div><div class="shade"></div>
+<div class="wrap">
+  <div class="col">
+    <div class="brand">KAW'S ATS PLAYGROUND</div>
+    <h1 id="headline">Starting soon</h1>
+    <div class="sub" id="sub">Grab a coffee — the convoy rolls out shortly.</div>
+    <div class="timer" id="timer"></div>
+  </div>
+  <div class="col">
+    <div class="card" id="nextCard"><div class="k">Next convoy</div><div class="big" id="next">—</div><div class="sub" id="nextWhere" style="font-size:20px"></div></div>
+    <div class="card" id="statsCard"><div class="k" id="statsTitle">Today's haul</div><div class="stats"><div><b id="sMiles">0</b><span>miles</span></div><div><b id="sLoads">0</b><span>deliveries</span></div><div><b id="sCash">$0</b><span>earned</span></div></div></div>
+    <div class="card" id="convoyCard"><div class="k" id="convoyTitle">On the road</div><div id="convoy"></div></div>
+    <div class="card feed hidden" id="feedCard"><div class="k">Stream highlights</div><div id="feed"></div></div>
+    <div class="card"><div class="k">Chat commands</div><div class="cmds"><b>!eta</b> · <b>!route</b> · <b>!load</b> · <b>!where</b> · <b>!convoy</b> · <b>!vote</b> · <b>!horn</b></div></div>
+  </div>
+</div>
+<script>
+(() => {
+  const P = new URLSearchParams(location.search);
+  const screen = ['starting', 'brb', 'ending'].includes(P.get('screen')) ? P.get('screen') : 'starting';
+  if (P.get('layout') === 'vertical') document.body.classList.add('vertical');
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const $ = id => document.getElementById(id);
+  const TEXT = {
+    starting: ['Starting soon', 'Grab a coffee — the convoy rolls out shortly.'],
+    brb: ['Be right back', 'Quick stop — keys are still in the ignition.'],
+    ending: ['Thanks for riding along', 'Drive safe out there. See you on the next haul.']
+  };
+  $('headline').textContent = P.get('title') || TEXT[screen][0];
+  $('sub').textContent = P.get('subtitle') || TEXT[screen][1];
+  if (screen === 'ending') { $('statsTitle').textContent = "This stream's haul"; $('feedCard').classList.remove('hidden'); $('convoyTitle').textContent = 'Drove with'; }
+
+  // Countdown (starting / brb): &minutes=5, or &until=<ISO time>.
+  const until = P.get('until') ? Date.parse(P.get('until')) : P.get('minutes') ? Date.now() + Number(P.get('minutes')) * 60000 : null;
+  function tick() {
+    if (!until || screen === 'ending') { $('timer').classList.add('hidden'); return; }
+    const s = Math.max(0, Math.round((until - Date.now()) / 1000));
+    $('timer').textContent = s ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : (screen === 'brb' ? 'Back any second…' : 'Here we go!');
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Background: slow drift over the convoy on a real map (or the ATS game map).
+  const loadJs = src => new Promise((ok, bad) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = bad; document.head.append(s); });
+  const css = href => { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.append(l); };
+  let bgMap = null;
+  (async () => {
+    try {
+      css('/vendor/leaflet/leaflet.css');
+      await loadJs('/vendor/leaflet/leaflet.js');
+      const L = window.L;
+      bgMap = L.map('bg', { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, keyboard: false }).setView([37.5, -117], 7);
+      const service = { satellite: 'World_Imagery', road: 'World_Street_Map' }[P.get('map')] || 'Canvas/World_Dark_Gray_Base';
+      L.tileLayer(`https://server.arcgisonline.com/ArcGIS/rest/services/${service}/MapServer/tile/{z}/{y}/{x}`, { maxZoom: 16 }).addTo(bgMap);
+      if (P.get('map') === 'atsgame') {
+        const st = await (await fetch('/api/atsmap')).json();
+        if (st.installed) {
+          css('/vendor/maplibre/maplibre-gl.css');
+          await loadJs('/vendor/maplibre/maplibre-gl.js'); await loadJs('/vendor/pmtiles/pmtiles.js'); await loadJs('/vendor/maplibre/leaflet-maplibre-gl.js');
+          window.maplibregl.addProtocol('pmtiles', new window.pmtiles.Protocol().tile);
+          const pane = bgMap.createPane('game'); pane.style.zIndex = 250;
+          L.maplibreGL({ pane: 'game', interactive: false, attributionControl: false, style: { version: 8, sources: { ats: { type: 'vector', url: `pmtiles://${location.origin}/maps/ats.pmtiles` } }, layers: [{ id: 'r', type: 'line', source: 'ats', 'source-layer': 'ats', filter: ['==', ['get', 'type'], 'road'], paint: { 'line-color': ['match', ['get', 'roadType'], 'freeway', '#ffb000', 'divided', '#ffcf5c', '#8fa6bb'], 'line-width': ['interpolate', ['linear'], ['zoom'], 5, 1, 12, 4] } }] } }).addTo(bgMap);
+        }
+      }
+      let t = 0;
+      setInterval(() => { t += 1; const c = bgMap.getCenter(); bgMap.panTo([c.lat + Math.sin(t / 40) * 0.01, c.lng + 0.02], { animate: true, duration: 3, easeLinearity: 1 }); }, 3000);
+    } catch {}
+  })();
+
+  const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
+  async function refresh() {
+    try {
+      const [tel, evs, trips, st] = await Promise.all([
+        fetch('/api/telemetry', { cache: 'no-store' }).then(r => r.json()),
+        fetch('/api/events', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ events: [] })),
+        fetch('/api/trips?limit=60', { cache: 'no-store' }).then(r => r.json()).catch(() => []),
+        fetch('/api/stream/status', { cache: 'no-store' }).then(r => r.json()).catch(() => ({}))
+      ]);
+      if (bgMap && tel.geo && Number.isFinite(tel.geo.lat) && !bgMap._kawCentered) { bgMap.setView([tel.geo.lat, tel.geo.lon], 8); bgMap._kawCentered = true; }
+      // Next convoy.
+      const next = (evs.events || []).filter(e => e.departureTime && Date.parse(e.departureTime) > Date.now() - 30 * 60000 && !['cancelled', 'finished'].includes(e.status)).sort((a, b) => Date.parse(a.departureTime) - Date.parse(b.departureTime))[0];
+      $('nextCard').classList.toggle('hidden', !next);
+      if (next) {
+        const mins = Math.round((Date.parse(next.departureTime) - Date.now()) / 60000);
+        $('next').textContent = `${next.name || 'Convoy'} · ${mins > 0 ? (mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins} min`) : 'now'}`;
+        $('nextWhere').textContent = [next.meetPoint, next.destination].filter(Boolean).join(' → ');
+      }
+      // Stats: this stream's session (ending) or today (starting / brb).
+      const since = screen === 'ending' && st.session?.startedAt ? Date.parse(st.session.startedAt) : new Date().setHours(0, 0, 0, 0);
+      const list = (Array.isArray(trips) ? trips : trips.trips || []).filter(t => t.status === 'delivered' && Date.parse(t.endedAt || t.startedAt) >= since);
+      $('sMiles').textContent = Math.round(list.reduce((a, t) => a + (Number(t.milesDriven) || 0), 0)).toLocaleString('en-US');
+      $('sLoads').textContent = list.length;
+      $('sCash').textContent = money(list.reduce((a, t) => a + (Number(t.deliveredIncome) || 0), 0));
+      // Convoy.
+      const roster = (tel.convoy?.roster || []).filter(r => r.online);
+      $('convoy').innerHTML = roster.length ? roster.slice(0, 7).map(r => `<div class="row"><span><span class="dot"></span>${esc(r.driverName)}${r.isLocal ? ' (me)' : ''}</span><span style="color:var(--muted)">${esc(r.job?.destinationCity ? `→ ${r.job.destinationCity}` : '')}</span></div>`).join('') : '<div class="row"><span style="color:var(--muted)">Solo run today</span></div>';
+      // Highlights (ending).
+      if (screen === 'ending') {
+        const ev = await fetch('/api/stream/recent?limit=40', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ events: [] }));
+        const hi = (ev.events || []).filter(e => ['delivery', 'achievement', 'crash', 'convoyJoin', 'effect'].includes(e.type)).slice(-6).reverse();
+        $('feed').innerHTML = hi.length ? hi.map(e => `<div class="row"><span>${esc(e.icon)} ${esc(e.title)}</span><span style="color:var(--muted)">${esc(e.detail || '')}</span></div>`).join('') : '<div class="row"><span style="color:var(--muted)">A smooth, quiet run.</span></div>';
+      }
+    } catch {}
+  }
+  refresh(); setInterval(refresh, 15000);
+})();
+</script>
+</body>
+</html>

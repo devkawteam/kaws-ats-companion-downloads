@@ -1,0 +1,15 @@
+KAW'S ATS PLAYGROUND COMPANION — THIRD-PARTY NOTICES
+
+This distribution contains Node.js, trucksim-telemetry, and an SCS shared-memory telemetry plugin. Their respective open-source license terms apply. Full license text supplied by trucksim-telemetry is included under plugin\trucksim-telemetry-LICENSE.txt and node_modules\trucksim-telemetry\LICENSE.
+
+Node.js license and third-party notices:
+https://github.com/nodejs/node/blob/main/LICENSE
+
+SCS shared-memory telemetry plugin source and license:
+https://github.com/RenCloud/scs-sdk-plugin
+
+Natural Earth map data:
+The bundled North America state/province and populated-place reference data is derived from Natural Earth 5.1.x. Natural Earth raster and vector map data is in the public domain.
+https://www.naturalearthdata.com/about/terms-of-use/
+
+American Truck Simulator and Euro Truck Simulator 2 are products of SCS Software. This Companion is an independent community project and is not affiliated with or endorsed by SCS Software.

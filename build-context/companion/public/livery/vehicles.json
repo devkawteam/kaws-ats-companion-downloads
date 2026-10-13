@@ -1,0 +1,1526 @@
+{
+ "source": "Vehicle data from Paint Job Packer by Carsmaniac (https://github.com/Carsmaniac/paintjob-packer), MIT License. See VEHICLES-LICENSE.txt.",
+ "game": "ATS",
+ "vehicles": [
+  {
+   "name": "Freightliner Cascadia",
+   "path": "freightliner.cascadia2024",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "72-inch Sleeper RR",
+     "internal": [
+      "s72_rr"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "72-inch Sleeper XT",
+     "internal": [
+      "s72_xt"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "48-inch Sleeper",
+     "internal": [
+      "s48"
+     ]
+    },
+    {
+     "code": "d",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Bumper": [
+     "bumper.paint",
+     "airdam.paint",
+     "airdam.pnt_aerox"
+    ],
+    "Cabin Deflectors (Cabin B)": [
+     "cabdefl.s72_xt_a",
+     "cabdefl.s72_xt_ax"
+    ],
+    "Cabin Deflectors - Aero (Cabin C)": [
+     "cabdefl.s48_aero"
+    ],
+    "Cabin Deflectors - Aero (Cabin D)": [
+     "cabdefl.day_aero"
+    ],
+    "Cabin Deflectors - Standard (Cabin D)": [
+     "cabdefl.day_std"
+    ],
+    "Corner Deflectors": [
+     "cor_def.aero"
+    ],
+    "Sideskirts - Aluminium or Chrome Tank": [
+     "sideskirt.shr120_e",
+     "sideskirt.shr120_eal",
+     "sideskirt.shr160_e",
+     "sideskirt.shr160_eal"
+    ],
+    "Sideskirts - Paint": [
+     "sideskirt.shr160_pt",
+     "sideskirt.mid200_pt_a",
+     "sideskirt.mid220_pt_a",
+     "sideskirt.lng200_pt_a",
+     "sideskirt.lng240_pt_a"
+    ],
+    "Sun Visor": [
+     "sunshield.paint"
+    ],
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Freightliner Cascadia 2019",
+   "path": "freightliner.cascadia2019",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "72-inch Sleeper RR",
+     "internal": [
+      "s72_rr"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "72-inch Sleeper XT",
+     "internal": [
+      "s72_xt"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "48-inch Sleeper",
+     "internal": [
+      "s48"
+     ]
+    },
+    {
+     "code": "d",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Bumper": [
+     "bumper.aero_pt",
+     "bumper.aero_pt20",
+     "bumper.fog_aero_pt",
+     "bumper.fog_a_pt20",
+     "bumper.fog_std_pt",
+     "bumper.std_pt"
+    ],
+    "Cabin Deflectors (Cabin B)": [
+     "cabdefl.s72_xt_a",
+     "cabdefl.s72_xt_ax"
+    ],
+    "Cabin Deflectors - Aero (Cabin C)": [
+     "cabdefl.s48_aero"
+    ],
+    "Cabin Deflectors - Aero (Cabin D)": [
+     "cabdefl.day_aero"
+    ],
+    "Cabin Deflectors - Standard (Cabin D)": [
+     "cabdefl.day_std"
+    ],
+    "Corner Deflectors": [
+     "cor_def.aero"
+    ],
+    "Sideskirts - Aluminium or Chrome Tank": [
+     "sideskirt.lng200_e",
+     "sideskirt.lng200_eal",
+     "sideskirt.lng240_e",
+     "sideskirt.lng240_eal",
+     "sideskirt.mid200_e",
+     "sideskirt.mid200_eal",
+     "sideskirt.mid220_e",
+     "sideskirt.mid220_eal",
+     "sideskirt.shr120_e",
+     "sideskirt.shr120_eal",
+     "sideskirt.shr160_e",
+     "sideskirt.shr160_eal"
+    ],
+    "Sideskirts - Paint": [
+     "sideskirt.lng200_pt",
+     "sideskirt.lng240_pt",
+     "sideskirt.mid200_pt",
+     "sideskirt.mid220_pt",
+     "sideskirt.shr160_pt",
+     "sideskirt.lng200_pt_a",
+     "sideskirt.lng240_pt_a",
+     "sideskirt.mid200_pt_a",
+     "sideskirt.mid220_pt_a"
+    ],
+    "Sun Visor": [
+     "sunshield.stock"
+    ],
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "International 9900i",
+   "path": "intnational.9900i",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "72-inch Sleeper",
+     "internal": [
+      "s72"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "51-inch Sleeper",
+     "internal": [
+      "s51"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Sun Visor": [
+     "sunshield.standard"
+    ],
+    "Cabin Deflector (Cabin C)": [
+     "cabdefl.day"
+    ]
+   }
+  },
+  {
+   "name": "International LoneStar",
+   "path": "intnational.lonestar",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "Sky Rise Sleeper",
+     "internal": [
+      "skyrise"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "High Rise Sleeper",
+     "internal": [
+      "hirise"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Front Bumper": [
+     "bumper.sensor",
+     "bumper.standard"
+    ],
+    "Sun Visor": [
+     "sunshield.standard"
+    ]
+   }
+  },
+  {
+   "name": "International LT",
+   "path": "intnational.lt",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "Skyrise Sleeper",
+     "internal": [
+      "skyrise"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "Hi-Rise Sleeper",
+     "internal": [
+      "hirise"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Front Bumper": [
+     "bumper.lux",
+     "bumper.paint",
+     "bumper.paint_s13",
+     "bumper.paint_pl_s13"
+    ],
+    "Cabin Deflectors": [
+     "cabdefl.hi_ext",
+     "cabdefl.hi_std"
+    ],
+    "Sideskirts": [
+     "sideskirt.lng_pn",
+     "sideskirt.mid_pn",
+     "sideskirt.shr_pn",
+     "sideskirt.lng_pn_s13",
+     "sideskirt.mid_pn_s13",
+     "sideskirt.shr_pn_s13"
+    ],
+    "Sun Visor": [
+     "sunshield.standard"
+    ],
+    "FlowBelow": [
+     "mudflaps.aero_paint"
+    ]
+   }
+  },
+  {
+   "name": "Kenworth T680",
+   "path": "kenworth.t680_2022",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "76-inch Sleeper",
+     "internal": [
+      "s76h"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "52-inch Sleeper",
+     "internal": [
+      "s52m"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Hood (Long)": [
+     "hood.long"
+    ],
+    "Front Bumper": [
+     "bumper.std_pnt_f",
+     "bumper.std_pnt_f_a",
+     "bumper.low_pnt_f",
+     "bumper.low_pnt_f_a"
+    ],
+    "Sideskirts": [
+     "sideskirt.s76_s_pnt",
+     "sideskirt.s76_l_pnt",
+     "sideskirt.s52_s_pnt",
+     "sideskirt.s52_l_pnt",
+     "sideskirt.day_s_pnt",
+     "sideskirt.day_l_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Kenworth T680 2014",
+   "path": "kenworth.t680",
+   "type": "truck",
+   "altUv": true,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "Hi Rise Sleeper",
+     "internal": [
+      "exclusive"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "Mid Roof Sleeper",
+     "internal": [
+      "standard"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Duty Day Cabin",
+     "internal": [
+      "duty"
+     ]
+    }
+   ],
+   "accessories": {
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Kenworth W900",
+   "path": "kenworth.w900",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "86-inch Studio Sleeper",
+     "internal": [
+      "s86"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "72-inch Aerodyne Sleeper",
+     "internal": [
+      "s72"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "72-inch Flat Roof Sleeper",
+     "internal": [
+      "s72f"
+     ]
+    },
+    {
+     "code": "d",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Front Bumper": [
+     "bumper.shape01_pnt",
+     "bumper.ram_pnt",
+     "bumper.shape04_pnt",
+     "bumper.shape02_pnt",
+     "bumper.mirage_pnt",
+     "bumper.boxer_pnt",
+     "bumper.shape03_pnt",
+     "bumper.ranger_pnt",
+     "bumper.foreman_pnt",
+     "bumper.shape05_pnt",
+     "bumper.storm_pnt",
+     "bumper.storm_chr"
+    ],
+    "Grille": [
+     "grill.std_pnt",
+     "grill.v18_pnt",
+     "grill.louver_pnt",
+     "grill.diamond_cut",
+     "grill.srd_pnt",
+     "grill.louver_a_pnt"
+    ],
+    "Mirrors": [
+     "mirror.shape1_pnt",
+     "mirror.nxtgen1_pnt",
+     "mirror.shape2_pnt",
+     "mirror.nxtgen2_pnt",
+     "mirror.modern1_pnt",
+     "mirror.modern2_pnt",
+     "fl_mirror.shape1_pnt",
+     "fr_mirror.shape1_pnt"
+    ],
+    "Sun Visor": [
+     "sunshield.untie_pnt",
+     "sunshield.shape01_pnt",
+     "sunshield.shape02_pnt",
+     "sunshield.shape03_pnt",
+     "sunshield.bat_pnt"
+    ],
+    "Exhaust": [
+     "exhaust.day_ss_s_pnt",
+     "exhaust.day_ss_l_pnt",
+     "exhaust.day_sa_l_pnt",
+     "exhaust.day_sn_s_pnt",
+     "exhaust.day_sn_l_pnt",
+     "exhaust.slp_ks_l_pnt",
+     "exhaust.slp_kn_l_pnt"
+    ],
+    "Fuel Tanks": [
+     "tank.pnt2_sh120",
+     "tank.pnt_sh120",
+     "doorstep.pnt_120",
+     "doorstep.pnt2_120",
+     "tank.pnt_sh180",
+     "tank.pnt2_sh180",
+     "doorstep.pnt_180",
+     "doorstep.pnt2_180",
+     "doorstep.pnt_180b",
+     "doorstep.pnt2_180b",
+     "tank.pnt2_md235",
+     "tank.pnt_md235",
+     "doorstep.pnt_235",
+     "doorstep.pnt2_235",
+     "doorstep.pnt_235b",
+     "doorstep.pnt2_235b",
+     "tank.pnt2_md260",
+     "tank.pnt_md260",
+     "tank.pnt_md300",
+     "tank.pnt2_md300",
+     "tank.pnt2_ln235",
+     "tank.pnt_ln235",
+     "tank.pnt2_ln260",
+     "tank.pnt_ln260",
+     "tank.pnt_ln300",
+     "tank.pnt2_ln300",
+     "tank.100yp_ln260",
+     "tank.100yp2_ln260"
+    ],
+    "Rear Bumper": [
+     "r_bumper.chariot_pnt",
+     "r_bumper.storm"
+    ],
+    "Cabin Deflectors (Cabin A)": [
+     "cabdefl.s86_std"
+    ],
+    "Cabin Deflectors (Cabin B)": [
+     "cabdefl.s72_std"
+    ],
+    "Cabin Deflectors - Wing": [
+     "cabdefl.wing_pnt",
+     "cabdefl.whale_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Mack Anthem",
+   "path": "mack.anthem",
+   "type": "truck",
+   "altUv": true,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "70-inch Sleeper",
+     "internal": [
+      "s70"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "48-inch Sleeper",
+     "internal": [
+      "s48"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Cabin Deflectors (Cabin A)": [
+     "cabdefl.s70_rcap",
+     "cabdefl.s70_rcap_ext"
+    ],
+    "Cabin Deflectors (Cabin B)": [
+     "cabdefl.s48_rcap_bl",
+     "cabdefl.s48_rcap_ch"
+    ],
+    "Cabin Deflectors (Cabin C)": [
+     "cabdefl.day_rcap_bl",
+     "cabdefl.day_rcap_ch"
+    ],
+    "Sideskirts (Cabin A)": [
+     "sideskirt.lng117_p",
+     "sideskirt.lng117_pc",
+     "sideskirt.lng117d_p",
+     "sideskirt.lng117d_pc",
+     "sideskirt.lng142_p",
+     "sideskirt.lng142_pc",
+     "sideskirt.lng142_pcs",
+     "sideskirt.lng142_ps",
+     "sideskirt.lng142d_p",
+     "sideskirt.lng142d_pc",
+     "sideskirt.lng142d_pcs",
+     "sideskirt.lng142d_ps",
+     "sideskirt.lng142d_ucs"
+    ],
+    "Sideskirts (Cabin B)": [
+     "sideskirt.mid117_p",
+     "sideskirt.mid117_pc",
+     "sideskirt.mid117_pcs",
+     "sideskirt.mid117_ps",
+     "sideskirt.mid117d_p",
+     "sideskirt.mid117d_pc",
+     "sideskirt.mid117d_pcs",
+     "sideskirt.mid117d_ps",
+     "sideskirt.mid93_p",
+     "sideskirt.mid93_pc",
+     "sideskirt.mid93d_p",
+     "sideskirt.mid93d_pc"
+    ],
+    "Sideskirts (Cabin C)": [
+     "sideskirt.shr72_p",
+     "sideskirt.shr72_pc",
+     "sideskirt.shr72d_p",
+     "sideskirt.shr72d_pc",
+     "sideskirt.shr93_p",
+     "sideskirt.shr93_pc",
+     "sideskirt.shr93_pcs",
+     "sideskirt.shr93_ps",
+     "sideskirt.shr93d_p",
+     "sideskirt.shr93d_pc",
+     "sideskirt.shr93d_pcs",
+     "sideskirt.shr93d_ps"
+    ],
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Mack Pinnacle",
+   "path": "mack.pinnacle",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "70-inch Sleeper",
+     "internal": [
+      "s70"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "48-inch Sleeper",
+     "internal": [
+      "s48"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Cabin Deflectors (Cabin A)": [
+     "cabdefl.s70_rcap",
+     "cabdefl.s70_rcap_ext"
+    ]
+   }
+  },
+  {
+   "name": "Peterbilt 389",
+   "path": "peterbilt.389",
+   "type": "truck",
+   "altUv": true,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "Ultra Cab Sleeper",
+     "internal": [
+      "exclusive"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "Low Roof Sleeper",
+     "internal": [
+      "standard"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "duty"
+     ]
+    }
+   ],
+   "accessories": {}
+  },
+  {
+   "name": "Peterbilt 579",
+   "path": "peterbilt.579",
+   "type": "truck",
+   "altUv": true,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "Hi Rise Sleeper",
+     "internal": [
+      "exclusive"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "Stand Up Sleeper",
+     "internal": [
+      "standard"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Duty Cabin",
+     "internal": [
+      "duty"
+     ]
+    }
+   ],
+   "accessories": {
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Volvo VNL",
+   "path": "volvo.vnl2025",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "860",
+     "internal": [
+      "74h"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "840",
+     "internal": [
+      "74m"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "440",
+     "internal": [
+      "42m"
+     ]
+    },
+    {
+     "code": "d",
+     "name": "300",
+     "internal": [
+      "dc"
+     ]
+    }
+   ],
+   "accessories": {
+    "Cabin Deflectors (Cabin B)": [
+     "cabdefl.std_42m"
+    ],
+    "Sideskirts": [
+     "sideskirt.std_pnt_dc",
+     "sideskirt.std_pnt_42",
+     "sideskirt.std_pnt_74"
+    ]
+   }
+  },
+  {
+   "name": "Volvo VNL 2014",
+   "path": "volvo.vnl",
+   "type": "truck",
+   "altUv": true,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "780",
+     "internal": [
+      "exclusive"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "730",
+     "internal": [
+      "standard"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "300",
+     "internal": [
+      "duty"
+     ]
+    }
+   ],
+   "accessories": {
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Volvo VNL 2018",
+   "path": "volvo.vnl2018",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "860",
+     "internal": [
+      "s860"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "740",
+     "internal": [
+      "s740"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "300",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "FlowBelow": [
+     "mudflaps.pnt2b_aero",
+     "mudflaps.pnt2b_aero_l",
+     "mudflaps.pnt2b_aero_w",
+     "mudflaps.pnt2w_aero",
+     "mudflaps.pnt2w_aero_l",
+     "mudflaps.pnt2w_aero_w",
+     "mudflaps.pntb_aero",
+     "mudflaps.pntb_aero_l",
+     "mudflaps.pntb_aero_w",
+     "mudflaps.pntw_aero",
+     "mudflaps.pntw_aero_l",
+     "mudflaps.pntw_aero_w"
+    ]
+   }
+  },
+  {
+   "name": "Volvo VNR Electric",
+   "path": "volvo.vnr_e",
+   "type": "truck",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "300",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {}
+  },
+  {
+   "name": "Western Star 49X",
+   "path": "westernstar.49x",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "72-inch Sleeper",
+     "internal": [
+      "s72",
+      "s72sb"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "48-inch Sleeper",
+     "internal": [
+      "s48",
+      "s48sb"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day",
+      "daysb"
+     ]
+    }
+   ],
+   "accessories": {
+    "Bumper": [
+     "bumper.paint_sb",
+     "bumper.paint2_sb",
+     "bumper.paint",
+     "bumper.pnt_log_sb",
+     "bumper.pnt2_log_sb",
+     "bumper.pnt_log"
+    ],
+    "Bull Bar": [
+     "f_grill.paint"
+    ]
+   }
+  },
+  {
+   "name": "Western Star 5700XE",
+   "path": "westernstar.5700xe",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "82-inch Sleeper",
+     "internal": [
+      "s82"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "54-inch Sleeper",
+     "internal": [
+      "s54"
+     ]
+    },
+    {
+     "code": "c",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Bumper": [
+     "bumper.duty",
+     "bumper.stock",
+     "bumper.highway"
+    ],
+    "Sideskirts": [
+     "sideskirt.day",
+     "sideskirt.s54",
+     "sideskirt.s82"
+    ],
+    "Front Fender": [
+     "f_fender.stock"
+    ],
+    "Sun Visor": [
+     "sunshield.stock_day",
+     "sunshield.stock_slp"
+    ],
+    "Cabin Deflector (Cabin A)": [
+     "cabdefl.s82"
+    ],
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Western Star 57X",
+   "path": "westernstar.57x",
+   "type": "truck",
+   "altUv": false,
+   "separate": true,
+   "colourPicker": false,
+   "cabins": [
+    {
+     "code": "a",
+     "name": "72-inch Sleeper",
+     "internal": [
+      "s72_rr"
+     ]
+    },
+    {
+     "code": "b",
+     "name": "Day Cab",
+     "internal": [
+      "day"
+     ]
+    }
+   ],
+   "accessories": {
+    "Bumper": [
+     "bumper.paint"
+    ],
+    "Cabin Deflector - Standard (Cabin B)": [
+     "cabdefl.day_std"
+    ],
+    "Cabin Deflector - Aero (Cabin B)": [
+     "cabdefl.day_aero"
+    ],
+    "Cabin Deflector - Aero II (Cabin B)": [
+     "cabdefl.day_aero2"
+    ],
+    "Sideskirts - Paint": [
+     "sideskirt.lng20_pt",
+     "sideskirt.lng24_pt",
+     "sideskirt.lng_hlf_pt",
+     "sideskirt.shr_pt"
+    ],
+    "Sideskirts - Duty": [
+     "sideskirt.lng_fnd_pt",
+     "sideskirt.shr12_fnd_pt",
+     "sideskirt.shr16_fnd_pt"
+    ],
+    "FlowBelow": [
+     "mudflaps.aero_pnt"
+    ]
+   }
+  },
+  {
+   "name": "Lode King Distinction",
+   "path": "lodeking.distinction",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (40 ft)": [
+     "body.hopper_40"
+    ],
+    "Body (50 ft)": [
+     "body.hopper_50"
+    ],
+    "Trailer Front (40 ft)": [
+     "f_body.paint_40"
+    ],
+    "Trailer Front (50 ft)": [
+     "f_body.paint_50"
+    ],
+    "Trailer Rear (40 ft)": [
+     "rear_body.paint_40"
+    ],
+    "Trailer Rear (50 ft)": [
+     "rear_body.paint_50"
+    ]
+   }
+  },
+  {
+   "name": "Lode King Prestige",
+   "path": "lodeking.prestige",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (Single)": [
+     "body.hopper_45",
+     "f_body.paint_45",
+     "rear_body.paint_45"
+    ],
+    "Body (B-Double)": [
+     "body.hopper_28",
+     "body.hopper_30",
+     "f_body.paint_28",
+     "f_body.paint_30",
+     "rear_body.paint_28",
+     "rear_body.paint_30"
+    ]
+   }
+  },
+  {
+   "name": "Prestige Distinction",
+   "path": "prestige.distinction",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (40 ft)": [
+     "body.hopper_40"
+    ],
+    "Body (50 ft)": [
+     "body.hopper_50"
+    ],
+    "Trailer Front (40 ft)": [
+     "f_body.paint_40"
+    ],
+    "Trailer Front (50 ft)": [
+     "f_body.paint_50"
+    ],
+    "Trailer Rear (40 ft)": [
+     "rear_body.paint_40"
+    ],
+    "Trailer Rear (50 ft)": [
+     "rear_body.paint_50"
+    ]
+   }
+  },
+  {
+   "name": "SCS Box Trailer",
+   "path": "scs.box",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (28 feet)": [
+     "body.dryvan_28",
+     "body.insulated_28",
+     "body.reefer_28"
+    ],
+    "Body (32 feet)": [
+     "body.dryvan_32",
+     "body.insulated_32",
+     "body.reefer_32"
+    ],
+    "Body (45 feet)": [
+     "body.dryvan_45",
+     "body.insulated_45",
+     "body.reefer_45"
+    ],
+    "Body (48 feet)": [
+     "body.dryvan_48",
+     "body.insulated_48",
+     "body.reefer_48"
+    ],
+    "Body (53 feet)": [
+     "body.dryvan_53",
+     "body.insulated_53",
+     "body.reefer_53"
+    ],
+    "Trailer Front": [
+     "f_body.paint",
+     "f_body.ch_unit",
+     "f_body.cooler",
+     "f_body.king"
+    ],
+    "Trailer Front - Wind Deflector": [
+     "f_body.wind_def"
+    ],
+    "Trailer Rear - Standard Door": [
+     "rear_body.simple",
+     "rear_body.simple_a"
+    ],
+    "Trailer Rear - Roll Up Door": [
+     "rear_body.roll_up",
+     "rear_body.roll_up_g"
+    ],
+    "Left Sideskirt - Aero": [
+     "chs_f_l.aero"
+    ],
+    "Left Sideskirt - 28 ft": [
+     "chs_f_l.paint_28",
+     "chs_f_l.paint_28h"
+    ],
+    "Left Sideskirt - 45 & 48 ft": [
+     "chs_f_l.paint_45",
+     "chs_f_l.paint_45h"
+    ],
+    "Left Sideskirt - 53 ft": [
+     "chs_f_l.paint_53",
+     "chs_f_l.paint_53h"
+    ],
+    "Right Sideskirt - Aero": [
+     "chs_f_r.aero"
+    ],
+    "Right Sideskirt - 28 ft": [
+     "chs_f_r.paint_28"
+    ],
+    "Right Sideskirt - 45 & 48 ft": [
+     "chs_f_r.paint_45"
+    ],
+    "Right Sideskirt - 53 ft": [
+     "chs_f_r.paint_53"
+    ]
+   }
+  },
+  {
+   "name": "SCS Bulk Feed",
+   "path": "scs.bulkfeed",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body": [
+     "body.bulkfeed_45"
+    ]
+   }
+  },
+  {
+   "name": "SCS Chemical Tank",
+   "path": "scs.chemtank",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body - Deep Drop Tank (43 ft)": [
+     "body.tank_43_dd"
+    ],
+    "Body - Deep Drop Tank (48 ft)": [
+     "body.tank_48_dd"
+    ],
+    "Body - Deep Drop Tank (53 ft)": [
+     "body.tank_53_dd"
+    ],
+    "Body - D-shaped Tank (43 ft)": [
+     "body.tank_43_ds"
+    ],
+    "Body - D-shaped Tank (48 ft)": [
+     "body.tank_48_ds"
+    ],
+    "Body - D-shaped Tank (53 ft)": [
+     "body.tank_53_ds"
+    ]
+   }
+  },
+  {
+   "name": "SCS Chip Van",
+   "path": "scs.chipvan",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body": [
+     "body.van_48",
+     "body.m_floor_48",
+     "body.belly_van_48"
+    ],
+    "Trailer Rear": [
+     "rear_body.simple"
+    ],
+    "Trailer Front": [
+     "f_body.paint"
+    ],
+    "Left Sideskirt - Aero": [
+     "chs_f_l.aero"
+    ],
+    "Left Sideskirt - Painted": [
+     "chs_f_l.paint_45"
+    ],
+    "Right Sideskirt - Aero": [
+     "chs_f_r.aero"
+    ],
+    "Right Sideskirt - Painted": [
+     "chs_f_r.paint_45"
+    ]
+   }
+  },
+  {
+   "name": "SCS Drop Deck (Sliding Tarp)",
+   "path": "scs.dropdeck",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Sliding Tarp (48 ft)": [
+     "body.curtain_48"
+    ],
+    "Sliding Tarp (53 ft)": [
+     "body.curtain_53"
+    ],
+    "Trailer Front - Wind Deflector": [
+     "f_body.wind_def"
+    ]
+   }
+  },
+  {
+   "name": "SCS Dry Bulk",
+   "path": "scs.drybulk",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (22 ft)": [
+     "body.hopper_22"
+    ],
+    "Body (32 ft)": [
+     "body.hopper_32"
+    ],
+    "Body (42 ft)": [
+     "body.hopper_42"
+    ],
+    "Body (48 ft)": [
+     "body.hopper_48"
+    ]
+   }
+  },
+  {
+   "name": "SCS Dumper",
+   "path": "scs.dumper",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body - End Dumper (30 ft)": [
+     "body.end_30"
+    ],
+    "Body - End Dumper (36 ft)": [
+     "body.end_36"
+    ],
+    "Body - Side Dumper (30 ft)": [
+     "body.side_30",
+     "body.side_30bd"
+    ],
+    "Body - Side Dumper (36 ft)": [
+     "body.side_36"
+    ],
+    "Trailer Rear (End Dumper)": [
+     "rear_body.simple",
+     "rear_body.exclusive"
+    ]
+   }
+  },
+  {
+   "name": "SCS Flatbed (Sliding Tarp)",
+   "path": "scs.flatbed",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Sliding Tarp (28 feet)": [
+     "body.curtain_28",
+     "body.curtain_28bd"
+    ],
+    "Sliding Tarp (32 feet)": [
+     "body.curtain_32"
+    ],
+    "Sliding Tarp (45 feet)": [
+     "body.curtain_45"
+    ],
+    "Sliding Tarp (48 feet)": [
+     "body.curtain_48"
+    ],
+    "Sliding Tarp (53 feet)": [
+     "body.curtain_53"
+    ],
+    "Trailer Front - Wind Deflector": [
+     "f_body.wind_def"
+    ]
+   }
+  },
+  {
+   "name": "SCS Food Tank",
+   "path": "scs.foodtank",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (28 feet)": [
+     "body.tank_28",
+     "body.tank_28_d"
+    ],
+    "Body (43 feet)": [
+     "body.tank_43"
+    ],
+    "Body (48 feet)": [
+     "body.tank_48"
+    ],
+    "Body (53 feet)": [
+     "body.tank_53"
+    ]
+   }
+  },
+  {
+   "name": "SCS Fuel Tank",
+   "path": "scs.fueltank",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (28 ft)": [
+     "chassis.ch_28",
+     "chassis.ch_28_d",
+     "chassis.ch_28_hook"
+    ],
+    "Body (32 ft)": [
+     "chassis.ch_32",
+     "chassis.ch_32_bd"
+    ],
+    "Body (43 ft)": [
+     "chassis.ch_43_hook",
+     "chassis.ch_43_r"
+    ],
+    "Body (48 ft)": [
+     "chassis.ch_48_3a"
+    ],
+    "Body (53 ft)": [
+     "chassis.ch_53_4a",
+     "chassis.ch_53_4s"
+    ]
+   }
+  },
+  {
+   "name": "SCS Gas Tank",
+   "path": "scs.gastank",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (32 ft)": [
+     "body.tank_32"
+    ],
+    "Body (43 ft)": [
+     "body.tank_43"
+    ],
+    "Body (48 ft)": [
+     "body.tank_48"
+    ],
+    "Body (53 ft)": [
+     "body.tank_53"
+    ],
+    "Rear Bumper": [
+     "r_bumper.sim_paint",
+     "r_bumper.exc_paint"
+    ],
+    "Pipeguards": [
+     "chs_f_l.pgpn",
+     "chs_f_l.pgpn_ext",
+     "chs_f_l.pgpn_albox",
+     "chs_f_l.pgpn_chbox",
+     "chs_f_r.pgpn",
+     "chs_f_r.pgpn_ext",
+     "chs_f_r.pgpn_albox",
+     "chs_f_r.pgpn_chbox"
+    ],
+    "Hoses": [
+     "l_body.hose1_pn_32",
+     "l_body.hose2_pn_32",
+     "l_body.hose1_pn_43",
+     "l_body.hose2_pn_43",
+     "l_body.hose1_pn_48",
+     "l_body.hose2_pn_48",
+     "l_body.hose1_pn_53",
+     "l_body.hose2_pn_53",
+     "r_body.hose1_pn_32",
+     "r_body.hose2_pn_32",
+     "r_body.hose1_pn_43",
+     "r_body.hose2_pn_43",
+     "r_body.hose1_pn_48",
+     "r_body.hose2_pn_48",
+     "r_body.hose1_pn_53",
+     "r_body.hose2_pn_53"
+    ],
+    "Rear Fender": [
+     "r_fender.pnt_sin_2",
+     "r_fender.pnt_mult_2",
+     "r_fender.pnt_sin_3",
+     "r_fender.pnt_mult_3",
+     "r_fender.pnt_sin_4",
+     "r_fender.pnt_mult_4"
+    ],
+    "Front Fender": [
+     "f_fender.paint"
+    ]
+   }
+  },
+  {
+   "name": "SCS Grain Hopper",
+   "path": "scs.grainhopper",
+   "type": "trailer_owned",
+   "altUv": false,
+   "separate": false,
+   "colourPicker": false,
+   "cabins": [],
+   "accessories": {
+    "Body (28 feet)": [
+     "body.hopper_28"
+    ],
+    "Body (40 feet)": [
+     "body.belt_40",
+     "body.hopper_40"
+    ],
+    "Body (50 feet)": [
+     "body.belt_50",
+     "body.hopper_50"
+    ],
+    "Trailer Front": [
+     "f_body.paint"
+    ],
+    "Trailer Rear": [
+     "rear_body.simple",
+     "rear_body.simple1",
+     "rear_body.simple2"
+    ]
+   }
+  }
+ ]
+}

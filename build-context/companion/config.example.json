@@ -1,0 +1,53 @@
+{
+  "pairingCode": "",
+  "driverName": "ATS Driver",
+  "dashboardPort": 4280,
+  "dashboardHost": "127.0.0.1",
+  "snapshotIntervalMs": 1000,
+  "ai": {
+    "enabled": false,
+    "model": "qwen3:8b",
+    "timeoutSeconds": 60,
+    "identity": "KAW's ATS Companion co-driver",
+    "instructions": ""
+  },
+  "remote": {
+    "enabled": false,
+    "endpoint": "https://p01--kaw-relay--4h7w2xmhzqqq.code.run/api/telemetry",
+    "apiKey": "",
+    "intervalMs": 3000,
+    "backupEndpoints": [
+      "https://kaws-ats-playground.onrender.com/api/telemetry"
+    ]
+  },
+  "voice": {
+    "enabled": false,
+    "rate": 0,
+    "volume": 85,
+    "prefix": "KAW Dispatch"
+  },
+  "discord": {
+    "enabled": false,
+    "webhookUrl": "",
+    "tripSummaries": true,
+    "achievements": true,
+    "includeIncome": true
+  },
+  "alerts": {
+    "enabled": true,
+    "lowFuelPercent": 15,
+    "fatigueWarnMinutes": 60,
+    "damageWarnPercent": 10,
+    "cargoDamageWarnPercent": 5,
+    "overspeedToleranceMph": 3,
+    "deadlineWarnMinutes": 60
+  },
+  "sharing": {
+    "mods": true,
+    "manifest": true
+  },
+  "cb": {
+    "discordVoiceUrl": "https://discord.com/channels/1214348167609581599/1532852330721050664",
+    "discordInviteUrl": "https://discord.gg/AWNUYJtpFd"
+  }
+}

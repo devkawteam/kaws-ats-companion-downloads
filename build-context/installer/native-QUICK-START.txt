@@ -1,0 +1,26 @@
+KAW'S ATS PLAYGROUND COMPANION v1.7.2
+
+Run KAW-ATS-Companion-Setup-v1.7.2.exe on Windows 10/11 x64.
+The installer includes a private Node.js runtime, a prebuilt telemetry module,
+and the ATS telemetry plugin. Drivers do not install Node.js, Python, npm,
+Visual Studio or C++ Build Tools.
+
+Close the Companion and ATS before installing or updating. Existing native
+installer settings and data are retained. Launch the Companion from its
+Start menu or desktop shortcut. Start ATS, accept its SDK warning, and load
+your truck to see live telemetry.
+
+If you previously used the script installer, your settings are normally in
+%LOCALAPPDATA%\KAW-ATS-Companion. This native installer copies its config.json
+and data when the native destination has no existing config. Stop that old
+Companion first; remove its old startup shortcut to avoid starting both copies.
+
+CB: Settings -> CB & relay backup -> confirm Main relay URL -> enable
+Share with convoy if desired -> Save. Enter the convoy code and relay key
+under Convoy -> Join a convoy, then open CB and select Check again.
+Custom relay addresses and saved keys are preserved. A relay must be running
+and may require a key. Discord links are a voice fallback, not a CB relay.
+
+The local dashboard is normally http://127.0.0.1:4280/.
+Wi-Fi access is optional; allow only private networks when selecting it.
+Never publish your private config.json, pairing code, relay key or radio PIN.

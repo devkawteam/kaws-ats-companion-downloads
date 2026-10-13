@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020812">
+<link rel="manifest" href="/manifest.webmanifest">
+<title>KAW'S ATS PLAYGROUND • LIVE COMPANION</title>
+<style>
+:root{
+  color-scheme:dark;--bg:#020812;--panel:#07111d;--panel2:#091725;--line:#0873c9;
+  --blue:#2a8fff;--green:#53ed63;--purple:#a84cff;--orange:#ff8a13;--yellow:#ffca3a;
+  --red:#ff5f57;--text:#f5f7fb;--muted:#9ca8b8;--dim:#647386;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -20%,rgba(33,97,170,.16),transparent 34%),linear-gradient(180deg,#01050b,#020812 55%,#01050b);color:var(--text);font-family:"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}
+body.flash-green:before,body.flash-orange:before,body.flash-red:before{content:"";position:fixed;inset:0;z-index:9997;pointer-events:none;animation:flash .9s ease-out}
+body.flash-green:before{box-shadow:inset 0 0 80px 22px rgba(83,237,99,.75)}
+body.flash-orange:before{box-shadow:inset 0 0 80px 22px rgba(255,138,19,.75)}
+body.flash-red:before{box-shadow:inset 0 0 90px 28px rgba(255,95,87,.85)}
+@keyframes flash{0%{opacity:1}100%{opacity:0}}
+.app{min-height:100vh;display:grid;grid-template-columns:230px 1fr}
+.sidebar{position:sticky;top:0;height:100vh;background:rgba(3,11,20,.97);border-right:1px solid #173b5b;padding:15px 12px;display:flex;flex-direction:column;z-index:20}
+.brand{padding:7px 8px 18px;text-align:center}.brand-logo{display:block;width:min(150px,100%);height:auto;margin:0 auto 8px;filter:drop-shadow(0 6px 12px rgba(0,126,255,.24))}.brand-main{font-weight:1000;font-style:italic;font-size:20px}.brand-main span{color:var(--blue)}.brand-sub{font-size:11px;color:#7e8b9c;text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
+.nav{display:grid;gap:5px}.nav-btn{border:1px solid transparent;background:transparent;color:#aeb8c5;border-radius:8px;text-align:left;padding:10px 11px;cursor:pointer;display:flex;gap:10px;align-items:center}
+.nav-btn:hover{background:#071827}.nav-btn.active{background:#09223a;border-color:#1267a7;color:#fff;box-shadow:inset 3px 0 var(--blue)}
+.nav-ico{width:22px;text-align:center;color:var(--blue);font-weight:1000}.sidebar-bottom{margin-top:auto;border-top:1px solid #16324a;padding-top:12px}
+.connection-mini{font-size:12px;color:#8d9aac}.connection-mini b{display:block;color:var(--green);margin-top:4px}
+.main{min-width:0;padding:12px 14px 30px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.topbar-brand{display:flex;align-items:center;min-width:0;gap:10px}.topbar-logo{width:58px;height:58px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 5px 10px rgba(0,126,255,.28))}
+.title{font-size:clamp(24px,3vw,44px);font-style:italic;font-weight:1000;white-space:nowrap}.title .blue{color:var(--blue)}.pulse{display:inline-block;width:8px;height:8px;background:var(--blue);border-radius:50%;box-shadow:0 0 10px var(--blue);vertical-align:middle;margin:0 8px}
+.top-status{display:flex;align-items:center;gap:8px;border:1px solid #1b435f;background:#05131f;border-radius:9px;padding:8px 11px;font-size:12px}.live-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 9px rgba(83,237,99,.7)}
+.page{display:none}.page.active{display:block}.panel{background:linear-gradient(180deg,rgba(8,20,33,.98),rgba(3,12,22,.99));border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.panel-head{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid #173853}.panel-title{font-size:16px;font-weight:1000;text-transform:uppercase;color:var(--blue)}.muted{color:var(--muted)}
+.status-grid{display:grid;grid-template-columns:1.4fr repeat(3,.8fr);gap:10px;margin-bottom:10px}.status-card{min-height:82px;padding:13px 15px;display:flex;align-items:center;gap:14px}.status-card .big{font-size:20px;font-weight:1000}.status-card .small{font-size:12px;color:#8b98a9;margin-top:3px}
+.metric-grid{display:grid;grid-template-columns:1.25fr repeat(4,1fr);gap:10px}.metric-card{min-height:180px;padding:15px;position:relative}.label{text-transform:uppercase;color:#c3cad2;font-size:13px}.metric{font-size:42px;font-weight:1000;text-align:center;margin-top:25px;line-height:1}.unit{text-align:center;margin-top:7px;color:var(--blue);font-size:18px;font-weight:900}
+.truck-name{font-size:23px;font-weight:1000;margin-top:5px}.truck-img{width:100%;height:100px;object-fit:contain;object-position:center bottom;display:none;margin-top:4px;filter:drop-shadow(0 8px 9px rgba(0,0,0,.45))}.truck-img.has-photo{display:block}.truck-photo-empty{height:62px;display:grid;place-items:center;text-align:center;color:var(--dim);font-size:12px;border:1px dashed #23435d;border-radius:7px;margin-top:8px;padding:8px}.truck-photo-actions{display:flex;gap:6px;margin-top:7px}.truck-photo-actions button{min-height:32px;flex:1;border:1px solid #215a84;background:#082139;color:#dceaff;border-radius:6px;padding:5px 7px;font-size:11px;cursor:pointer}.truck-photo-actions button.secondary{border-color:#384756;background:#08121c;color:#aeb9c5}.truck-photo-note{font-size:10px;color:#6f8193;margin-top:5px;text-align:center}
+.drive-lower{display:grid;grid-template-columns:1.15fr 1fr;gap:10px;margin-top:10px}.trip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#12324b}.cell{background:#04101b;padding:12px}.cell .k{font-size:11px;color:#8290a1;text-transform:uppercase}.cell .v{font-size:18px;font-weight:900;margin-top:5px}
+.progress{height:9px;background:#132538;border-radius:999px;overflow:hidden;margin-top:9px}.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green))}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:9px 10px;border-bottom:1px solid #15314a;text-align:left;white-space:nowrap}.table th{font-size:10px;color:#7e8da0;text-transform:uppercase;letter-spacing:.05em}.good{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}.blue{color:var(--blue)}
+.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.health-row{display:grid;grid-template-columns:120px 1fr 55px;gap:9px;align-items:center;margin:10px 0}.health-track{height:10px;background:#112235;border-radius:999px;overflow:hidden}.health-fill{height:100%;background:var(--green);border-radius:999px}.health-pct{text-align:right;font-weight:900}
+.system-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}.system-chip{border:1px solid #203a52;background:#06121e;border-radius:7px;padding:10px 7px;text-align:center}.system-chip.on{border-color:#248c45;box-shadow:inset 0 0 18px rgba(70,220,100,.09)}.system-chip .name{font-size:10px;color:#92a0b0;text-transform:uppercase}.system-chip .state{font-size:12px;font-weight:1000;margin-top:4px}.system-chip.on .state{color:var(--green)}
+.instrument-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}.instrument{border:1px solid #19344d;background:#06121e;border-radius:7px;padding:10px}.instrument .ik{font-size:10px;color:#8594a6;text-transform:uppercase}.instrument .iv{font-size:19px;font-weight:1000;margin-top:4px}
+.nav-grid{display:grid;grid-template-columns:1.2fr repeat(4,.8fr);gap:1px;background:#12324b}.nav-card{background:#04101b;padding:15px;min-height:95px}.nav-card .v{font-size:22px;font-weight:1000;margin-top:7px}
+.convoy-summary{display:flex;gap:16px;color:#9fb0c2;font-size:12px}.convoy-summary b{color:#fff}.command-bar{display:flex;gap:7px;flex-wrap:wrap;padding:10px;border-bottom:1px solid #173853}.cmd{background:#082139;border:1px solid #17659d;color:#dceaff;border-radius:7px;padding:8px 10px;cursor:pointer}.cmd.emergency{border-color:#af3d38;color:#ff9b95}.cmd:hover{filter:brightness(1.15)}
+.radar-layout{display:grid;grid-template-columns:minmax(360px,1.35fr) minmax(300px,.85fr);gap:10px}.radar-stage{padding:12px}.radar-canvas{display:block;width:100%;aspect-ratio:1;background:radial-gradient(circle,#0a2840 0 1px,transparent 2px),#030d18;background-size:28px 28px;border:1px solid #1b547d;border-radius:50%;max-height:640px}.radar-controls{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid #173853}.radar-controls label{font-size:11px;color:var(--muted)}.radar-controls select,.radar-controls input,.voice-control{background:#04101b;color:#fff;border:1px solid #245477;border-radius:7px;padding:8px}.radar-driver{display:grid;grid-template-columns:1fr auto;gap:5px;padding:10px 12px;border-bottom:1px solid #143049}.radar-driver .where{color:var(--blue);font-weight:900}.voice-box{padding:14px}.voice-button{width:100%;min-height:76px;border:2px solid var(--blue);background:#09233a;color:#fff;border-radius:12px;font-size:22px;font-weight:1000;cursor:pointer}.voice-button.listening{border-color:var(--green);box-shadow:0 0 24px rgba(83,237,99,.25)}.voice-answer{min-height:68px;margin-top:10px;padding:10px;border:1px solid #173e5d;border-radius:8px;color:#c9d8e8;line-height:1.45}.radar-alert{padding:8px 10px;border-left:3px solid var(--yellow);background:#091725;margin:7px 0;border-radius:4px;font-size:12px}@media(max-width:900px){.radar-layout{grid-template-columns:1fr}.radar-canvas{max-height:70vh}}
+.nav-copilot{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}.copilot-card{border:1px solid #1c496b;background:#051522;border-radius:9px;padding:12px}.copilot-card .k{font-size:10px;color:var(--muted);text-transform:uppercase}.copilot-card .v{font-size:20px;font-weight:1000;margin-top:6px}.suggest-layout{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(360px,1.2fr);gap:10px}.suggest-form{padding:15px}.suggest-form textarea{width:100%;min-height:150px;resize:vertical}.suggest-card{padding:12px;border-bottom:1px solid #173853}.suggest-card h3{margin:0 0 5px}.suggest-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}@media(max-width:800px){.nav-copilot{grid-template-columns:1fr 1fr}.suggest-layout{grid-template-columns:1fr}}
+.coach-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:10px}.coach-main{padding:18px;text-align:center}.coach-action{font-size:42px;font-weight:1000;color:var(--green);margin:16px 0 5px}.coach-detail{color:#a3afbd}.gear-display{font-size:70px;font-weight:1000;color:var(--blue);line-height:1}.range-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.range-box{border:1px solid #1d3f59;border-radius:7px;padding:10px;background:#06121e}.range-box .rk{font-size:10px;color:#8997a8;text-transform:uppercase}.range-box .rv{font-size:18px;font-weight:1000;margin-top:4px}.coach-settings{padding:14px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.form-field label{display:block;font-size:11px;color:#8b99aa;text-transform:uppercase;margin-bottom:5px}.form-field select,.form-field input{width:100%;background:#05111c;color:#fff;border:1px solid #1c3d58;border-radius:7px;padding:9px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{padding:15px}.stat .sk{font-size:11px;color:#8392a5;text-transform:uppercase}.stat .sv{font-size:28px;font-weight:1000;margin-top:8px}
+.placeholder{padding:30px;text-align:center;color:#8c9aac}.placeholder .ph-title{font-size:22px;color:#fff;font-weight:1000}.placeholder p{max-width:720px;margin:8px auto;line-height:1.55}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.setting{padding:15px}.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.switch{width:44px;height:24px;border-radius:99px;background:#1c2937;border:1px solid #29445d;position:relative;cursor:pointer}.switch:after{content:"";position:absolute;top:2px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}.switch.on{background:#1679dc}.switch.on:after{left:21px}
+.toast-stack{position:fixed;right:16px;top:16px;z-index:9999;display:grid;gap:8px;width:min(370px,calc(100vw - 32px))}.toast{background:#07131f;border:1px solid #17659d;border-left:4px solid var(--blue);border-radius:8px;padding:11px 12px;box-shadow:0 12px 30px rgba(0,0,0,.35);animation:slide .2s ease-out}.toast.join{border-left-color:var(--green)}.toast.leave{border-left-color:var(--orange)}.toast.critical{border-left-color:var(--red)}.toast .tt{font-weight:1000}.toast .ts{font-size:12px;color:#98a6b6;margin-top:3px}
+@keyframes slide{from{transform:translateX(25px);opacity:0}to{transform:none;opacity:1}}
+.mobile-nav{display:none}
+.footer{text-align:center;color:#738296;font-size:11px;padding:16px}
+@media(max-width:1050px){
+  .app{grid-template-columns:190px 1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}.metric-card:first-child{grid-column:span 2}
+  .status-grid{grid-template-columns:1fr 1fr}.drive-lower,.coach-layout,.ops-grid,.settings-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  body{padding-bottom:72px}.app{display:block}.sidebar{display:none}.main{padding:8px 8px 20px}.topbar{display:block}.topbar-brand{justify-content:center}.topbar-logo{width:54px;height:54px}.title{font-size:24px;white-space:normal;text-align:center}.top-status{margin:8px auto 0;width:max-content}
+  .status-grid{grid-template-columns:1fr 1fr}.status-card{min-height:70px}.metric-grid{grid-template-columns:1fr 1fr}.metric-card:first-child{grid-column:span 2}.metric-card{min-height:155px}.metric{font-size:36px;margin-top:20px}
+  .trip-grid,.nav-grid{grid-template-columns:1fr 1fr}.system-grid{grid-template-columns:repeat(3,1fr)}.instrument-grid{grid-template-columns:1fr 1fr}.coach-layout{grid-template-columns:1fr}.gear-display{font-size:58px}.stats-grid{grid-template-columns:1fr 1fr}
+  .mobile-nav{position:fixed;left:0;right:0;bottom:0;height:66px;background:rgba(3,11,20,.98);border-top:1px solid #17415f;z-index:50;display:flex;overflow-x:auto;padding:5px 4px env(safe-area-inset-bottom)}
+  .mobile-nav button{min-width:72px;flex:1;background:transparent;border:0;color:#8896a8;font-size:10px;display:grid;place-items:center;gap:2px}.mobile-nav button span{display:block;font-size:18px;color:var(--blue)}.mobile-nav button.active{color:#fff;background:#081d31;border-radius:7px}
+  .command-bar{overflow-x:auto;flex-wrap:nowrap}.cmd{white-space:nowrap}
+}
+@media(max-width:480px){.status-grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr}.metric-card:first-child{grid-column:auto}.trip-grid,.nav-grid{grid-template-columns:1fr}.system-grid{grid-template-columns:1fr 1fr}.stats-grid{grid-template-columns:1fr}}
+
+/* v0.5 Dashboard Studio */
+.studio-toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:10px;border-bottom:1px solid #173853}
+.studio-toolbar select,.studio-toolbar input{background:#05111c;color:#fff;border:1px solid #1d405d;border-radius:7px;padding:8px 10px}
+.studio-toolbar .grow{flex:1;min-width:170px}
+.studio-shell{display:grid;grid-template-columns:250px 1fr;gap:10px;margin-top:10px}
+.widget-library{padding:10px;max-height:calc(100vh - 180px);overflow:auto}
+.widget-search{width:100%;background:#05111c;color:#fff;border:1px solid #1d405d;border-radius:7px;padding:8px;margin-bottom:10px}
+.widget-item{border:1px solid #1b3952;border-radius:7px;background:#06121e;padding:9px;margin-bottom:7px;cursor:pointer}
+.widget-item:hover{border-color:var(--blue);background:#082039}.widget-item b{display:block}.widget-item span{font-size:11px;color:#8796a8}
+.canvas-wrap{min-width:0}.dashboard-canvas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:72px;gap:8px;min-height:620px;padding:10px;background:linear-gradient(180deg,rgba(4,14,24,.98),rgba(1,8,15,.98));border:1px dashed #23547a;border-radius:9px}
+.studio-widget{position:relative;background:linear-gradient(180deg,#071725,#04101a);border:1px solid #146fae;border-radius:8px;overflow:hidden;min-width:0}
+.studio-widget.dragging{opacity:.6;border-color:var(--green)}.studio-widget-head{height:31px;padding:0 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #173853;cursor:move}
+.studio-widget-title{font-size:11px;color:#b9c7d6;text-transform:uppercase;font-weight:900}.studio-widget-actions{display:flex;gap:5px}.studio-widget-actions button{width:23px;height:22px;border:1px solid #284760;background:#07131e;color:#9fafbf;border-radius:5px;cursor:pointer;padding:0}
+.studio-widget-body{height:calc(100% - 31px);padding:9px;overflow:auto}.studio-metric{text-align:center;font-size:34px;font-weight:1000;margin-top:10px}.studio-sub{text-align:center;color:#8c9bac;font-size:11px;margin-top:4px}
+.empty-canvas{grid-column:1/-1;align-self:center;text-align:center;color:#708196}.empty-canvas b{display:block;color:#b7c2ce;font-size:22px;margin-bottom:7px}
+.resize-handle{position:absolute;right:0;bottom:0;width:18px;height:18px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 45%,#2c8cd0 46%,#2c8cd0 55%,transparent 56%)}
+.layout-card{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border:1px solid #183750;border-radius:7px;margin-top:7px}.layout-card.active{border-color:var(--green)}
+.command-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.command-card{padding:14px;cursor:pointer;min-height:110px}.command-card:hover{border-color:var(--green)}.command-card .cc-title{font-weight:1000;font-size:17px}.command-card .cc-desc{font-size:12px;color:#8998a9;margin-top:7px;line-height:1.45}.command-card .cc-cmd{font-family:Consolas,monospace;color:var(--blue);font-size:12px;margin-top:10px}
+.command-output{padding:12px;min-height:120px;font-family:Consolas,monospace;color:#b9c7d6;white-space:pre-wrap}
+@media(max-width:1100px){.studio-shell{grid-template-columns:1fr}.widget-library{max-height:none;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.widget-item{margin:0}.command-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.widget-library{grid-template-columns:1fr 1fr}.dashboard-canvas{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:64px}.command-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.widget-library{grid-template-columns:1fr}.dashboard-canvas{grid-template-columns:repeat(4,minmax(0,1fr));padding:6px;gap:6px}}
+
+
+/* v0.6 Convoy Intelligence */
+.intel-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:10px}.intel-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}.intel-stat{border:1px solid #1b3b55;background:#06121e;border-radius:8px;padding:12px}.intel-stat .k{font-size:10px;color:#8291a4;text-transform:uppercase}.intel-stat .v{font-size:24px;font-weight:1000;margin-top:6px}
+.dlc-chip-wrap{display:flex;gap:6px;flex-wrap:wrap;padding:10px}.dlc-chip{border:1px solid #23547a;background:#061522;border-radius:999px;padding:6px 9px;font-size:11px}.dlc-chip.good{border-color:#2d7c45;color:#7eff8d}.dlc-chip.base{border-color:#3c6ea0;color:#89c4ff}
+.route-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;padding:10px}.route-form select{background:#05111c;color:#fff;border:1px solid #1d405d;border-radius:7px;padding:9px}.route-result{padding:12px}.path-line{font-size:18px;font-weight:1000;color:#dce7f3}.missing-list{margin-top:8px;font-size:12px;color:#ff9b95}
+.load-advisor{padding:12px}.load-profile{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:8px;margin-bottom:10px}.load-profile input,.load-profile select{background:#05111c;color:#fff;border:1px solid #1d405d;border-radius:7px;padding:9px}.load-score{font-size:44px;font-weight:1000}.load-rating{font-size:18px;font-weight:1000}.load-note{padding:6px 0;border-bottom:1px solid #153149;color:#b7c3cf;font-size:12px}.mod-list{max-height:280px;overflow:auto;padding:8px}.mod-row{display:flex;justify-content:space-between;gap:10px;padding:7px;border-bottom:1px solid #153149;font-size:12px}.readiness-list{padding:10px}.ready-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px;border-bottom:1px solid #153149}.ready-item .status{font-weight:1000}
+@media(max-width:1000px){.intel-grid{grid-template-columns:1fr}.intel-summary{grid-template-columns:1fr 1fr}.load-profile{grid-template-columns:1fr 1fr}.route-form{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.intel-summary{grid-template-columns:1fr}.load-profile,.route-form{grid-template-columns:1fr}}
+
+</style>
+<style id="device-adaptive-v061">
+/* Device-adaptive v0.6.1: phones, iPad mini, 10-inch tablets and second screens */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scrollbar-gutter:stable}
+body{overscroll-behavior-y:none;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+button,.nav-btn,.cmd,.command-card,.switch{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button,.cmd,input,select{min-height:44px}.nav-btn{min-height:44px}.table-wrap{-webkit-overflow-scrolling:touch}
+.mobile-more-sheet{display:none}.device-badge{display:none}
+@media (pointer:coarse){button,.cmd,.nav-btn{min-height:48px}.switch{width:50px;height:28px}.switch:after{width:22px;height:22px}.switch.on:after{left:23px}}
+@media (min-width:1600px){.main{padding:16px 20px 38px}.metric-card{min-height:205px}.metric{font-size:50px}.panel{border-radius:12px}.title{font-size:46px}.status-grid,.metric-grid,.drive-lower{gap:14px}}
+@media (min-width:761px) and (max-width:1180px){.app{grid-template-columns:176px 1fr}.sidebar{padding-inline:8px}.brand-main{font-size:17px}.nav-btn{padding:9px 7px;gap:6px}.main{padding:10px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric-card:first-child{grid-column:1/-1}.drive-lower,.ops-grid,.coach-layout,.settings-grid{grid-template-columns:1fr}.status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.title{white-space:normal}}
+@media (max-width:900px){
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}.app{display:block}.sidebar{display:none}.main{padding:10px 10px 24px}.topbar{align-items:flex-start}.title{white-space:normal;font-size:clamp(22px,5vw,34px)}
+  .mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);height:calc(70px + env(safe-area-inset-bottom));padding:5px 5px env(safe-area-inset-bottom);overflow:visible}
+  .mobile-nav button{min-width:0;min-height:58px;border-radius:8px}.mobile-nav button span{font-size:20px}
+  .mobile-more-sheet{position:fixed;inset:0;z-index:80;background:rgba(0,4,10,.72);backdrop-filter:blur(5px);padding:16px;align-items:flex-end}
+  .mobile-more-sheet.open{display:flex}.mobile-more-card{width:100%;max-height:min(72vh,620px);overflow:auto;background:#06121e;border:1px solid #1b5f90;border-radius:16px;padding:12px 12px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -18px 50px rgba(0,0,0,.5)}
+  .mobile-more-head{display:flex;justify-content:space-between;align-items:center;padding:3px 5px 12px}.mobile-more-head b{font-size:18px}.mobile-more-head button{width:44px;border:1px solid #274a65;border-radius:9px;background:#0a1b2a;color:#fff}
+  .mobile-more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mobile-more-grid button{border:1px solid #1d4d70;background:#081a29;color:#dbe9f7;border-radius:10px;padding:12px;text-align:left}.mobile-more-grid button.active{border-color:var(--green);color:#fff}
+  .table th,.table td{padding:11px 10px}.panel-head{min-height:46px;height:auto;padding-block:8px}
+}
+@media (max-width:600px){
+  .main{padding:7px 7px 18px}.topbar{display:block}.title{text-align:center;font-size:22px}.top-status{margin:7px auto 0;width:max-content}.status-grid{grid-template-columns:1fr}.status-card{min-height:68px;padding:10px 12px}
+  .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.metric-card:first-child{grid-column:1/-1}.metric-card{min-height:132px;padding:11px}.metric{font-size:34px;margin-top:16px}.unit{font-size:15px}.truck-img{height:105px}
+  .drive-lower,.ops-grid,.coach-layout,.settings-grid,.intel-grid{grid-template-columns:1fr}.trip-grid,.nav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cell,.nav-card{padding:10px}.system-grid,.instrument-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:8px}.range-row{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}
+  .panel-title{font-size:14px}.command-output{font-size:12px}.health-row{grid-template-columns:92px 1fr 48px}.mobile-more-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:390px){.metric-grid{grid-template-columns:1fr}.metric-card:first-child{grid-column:auto}.trip-grid,.nav-grid,.mobile-more-grid{grid-template-columns:1fr}.mobile-nav button{font-size:9px}}
+@media (orientation:landscape) and (max-height:600px){body{padding-bottom:62px}.main{padding-top:5px}.topbar{margin-bottom:5px}.title{font-size:20px}.top-status{padding:5px 8px}.status-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.status-card{min-height:56px;padding:8px}.metric-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.metric-card:first-child{grid-column:auto}.metric-card{min-height:118px}.truck-img{height:78px}.metric{font-size:31px;margin-top:12px}.mobile-nav{height:58px}.mobile-nav button{min-height:48px}}
+body.hud-mode .sidebar,body.hud-mode .mobile-nav,body.hud-mode .footer,body.nav-screen .sidebar,body.nav-screen .mobile-nav,body.nav-screen .footer{display:none!important}body.hud-mode .app,body.nav-screen .app{display:block}body.hud-mode .main,body.nav-screen .main{padding:8px}body.hud-mode .topbar,body.nav-screen .topbar{margin-bottom:7px}body.hud-mode .page:not(#page-drive),body.nav-screen .page:not(#page-navigation){display:none!important}body.nav-screen #page-navigation>.panel:nth-of-type(1),body.nav-screen #page-navigation>.panel:nth-of-type(3){display:none}body.nav-screen #page-navigation>.panel:nth-of-type(2){margin-top:0!important}body.nav-screen .route-canvas{height:calc(100vh - 245px);min-height:480px}body.nav-screen #page-navigation>.panel:last-child{margin-top:8px!important}
+.radio-launch{display:grid;grid-template-rows:auto minmax(650px,1fr);gap:10px}.radio-banner{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px}.radio-frame{width:100%;min-height:700px;border:1px solid #175981;border-radius:12px;background:#020a12}.radio-open{display:inline-grid;place-items:center;min-height:46px;padding:10px 16px;border-radius:9px;background:var(--blue);color:#fff;text-decoration:none;font-weight:950}@media(max-width:900px){.radio-frame{display:none}.radio-launch{grid-template-rows:auto}.radio-banner{display:grid}.radio-open{width:100%;min-height:58px}}
+.cab-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}.cab-card{border:1px solid #1a4869;border-radius:9px;padding:11px;background:#04111c}.cab-card .k{font-size:10px;color:#84a4bf;text-transform:uppercase}.cab-card .v{font-size:19px;font-weight:1000;margin-top:5px}.route-canvas{width:100%;height:clamp(380px,48vh,680px);display:block;background:radial-gradient(circle at center,#0a2941,#020a12);border-radius:9px}@media(max-width:800px){.cab-grid{grid-template-columns:repeat(2,1fr)}.route-canvas{height:52vh;min-height:330px}body.nav-screen .route-canvas{height:calc(100vh - 300px);min-height:360px}}
+.popout-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.widget-popout{display:none;min-height:100vh;padding:14px;background:radial-gradient(circle at top,#0b2944,#020812 55%)}body.widget-mode .app,body.widget-mode .mobile-nav,body.widget-mode .mobile-more-sheet,body.widget-mode #toasts{display:none!important}body.widget-mode .widget-popout{display:grid;place-items:stretch}.popout-card{border:1px solid #1b70a8;border-radius:16px;background:#04121f;padding:18px;display:grid;grid-template-rows:auto 1fr;min-height:calc(100vh - 28px)}.popout-title{font-size:clamp(17px,4vw,30px);font-weight:1000;color:#8cc8ff;text-transform:uppercase}.popout-body{display:grid;place-items:center;font-size:clamp(25px,7vw,78px);text-align:center}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+<style id="cab-customization-v110">
+:root{--font-scale:1;--gauge-scale:1;--cab-glow:rgba(42,143,255,.42);--gauge-track:#14293b;--gauge-fill:var(--blue)}
+body{font-size:calc(16px * var(--font-scale))}.metric{font-size:calc(42px * var(--font-scale))}.truck-name{font-size:calc(23px * var(--font-scale))}.panel-title{font-size:calc(16px * var(--font-scale))}
+.gauge-face{width:min(calc(145px * var(--gauge-scale)),100%);aspect-ratio:1;margin:4px auto 0;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(from 225deg,var(--gauge-fill) calc(var(--gauge-value,0)*2.7deg),var(--gauge-track) 0 270deg,transparent 0);filter:drop-shadow(0 0 8px var(--cab-glow))}
+.gauge-face:before{content:"";position:absolute;inset:10px;border-radius:50%;background:radial-gradient(circle at 48% 38%,#10283a,#030b13 68%);border:2px solid #2b465b;box-shadow:inset 0 0 18px #000,0 0 0 2px #02060a}
+.gauge-center{position:relative;z-index:1;text-align:center}.gauge-center .metric{font-size:calc(30px * var(--font-scale));margin:0}.gauge-center .unit{font-size:calc(13px * var(--font-scale));margin-top:4px}.gauge-card>.progress{margin-top:-3px;position:relative;z-index:2}
+body.gauges-digital .gauge-face{width:auto;aspect-ratio:auto;margin:0;background:none;filter:none}body.gauges-digital .gauge-face:before{display:none}body.gauges-digital .gauge-center .metric{font-size:calc(42px * var(--font-scale));margin-top:25px}body.gauges-digital .gauge-center .unit{font-size:calc(18px * var(--font-scale))}
+body.gauges-hybrid .gauge-face{border-radius:18px;aspect-ratio:1.35;background:linear-gradient(145deg,#0b2031,#020911);border:2px solid var(--gauge-fill)}body.gauges-hybrid .gauge-face:before{border-radius:13px;inset:7px;background:linear-gradient(#071725,#020a12)}
+.system-chip{position:relative;min-height:76px;display:grid;place-content:center;transition:.16s}.system-chip .sys-icon{font:900 25px/1 "Segoe UI Symbol","Arial Unicode MS",sans-serif;color:#526678;filter:drop-shadow(0 0 0 transparent);margin-bottom:5px}.system-chip.on .sys-icon{color:var(--indicator-color,var(--green));filter:drop-shadow(0 0 7px var(--indicator-color,var(--green)))}.system-chip.on{border-color:var(--indicator-color,var(--green));box-shadow:inset 0 0 22px color-mix(in srgb,var(--indicator-color,var(--green)) 18%,transparent)}.system-chip.signal.on .sys-icon{animation:signalPulse .75s steps(1) infinite}.system-chip.hazard.on .sys-icon{animation:signalPulse .55s steps(1) infinite}@keyframes signalPulse{50%{opacity:.22}}
+.setting-help{font-size:12px;margin-top:4px;line-height:1.45}.setting-control{width:100%;margin-top:10px;background:#05111c;color:#fff;border:1px solid #1c3d58;border-radius:7px;padding:10px}.setting-range{width:100%;margin-top:12px;accent-color:var(--blue)}.appearance-setting label{display:block;color:inherit;font-size:inherit}.appearance-setting label span{float:right;color:var(--blue)}
+body.density-compact .main{padding:7px 9px 18px}body.density-compact .metric-grid,body.density-compact .status-grid,body.density-compact .drive-lower{gap:6px}body.density-compact .metric-card{min-height:142px;padding:10px}body.density-compact .status-card{min-height:62px;padding:9px 11px}body.density-compact .cell{padding:8px}
+body.density-touch button,body.density-touch input,body.density-touch select{min-height:54px}body.density-touch .nav-btn{min-height:54px}body.density-touch .metric-card{min-height:220px;padding:18px}body.density-touch .system-chip{min-height:96px}body.density-touch .cell{padding:16px}
+body.theme-classic{--bg:#100b07;--panel:#20170e;--panel2:#2b2015;--line:#9f7135;--blue:#e6b96e;--green:#85e576;--purple:#d8a76b;--orange:#ff9f43;--yellow:#ffd36d;--text:#fff4dc;--muted:#c1aa8b;--dim:#806f59;--cab-glow:rgba(255,188,92,.34);--gauge-track:#332516;--gauge-fill:#e6b96e}body.theme-classic .panel{background:linear-gradient(180deg,#251b11,#120d08);box-shadow:inset 0 0 20px #0008}body.theme-classic .gauge-face:before{background:radial-gradient(circle,#211b13,#060403 75%);border-color:#b18a50}
+body.theme-modern{--bg:#06090d;--panel:#111820;--panel2:#18232d;--line:#73879a;--blue:#e6f2ff;--green:#62ffad;--purple:#b9a7ff;--orange:#ffae57;--yellow:#ffe66b;--text:#f8fbff;--muted:#a6b4c0;--dim:#6d7b87;--cab-glow:rgba(220,240,255,.3);--gauge-track:#25313b;--gauge-fill:#d8ecff}
+body.theme-retro{--bg:#060b07;--panel:#0d1a10;--panel2:#142419;--line:#6c8c49;--blue:#b6ff75;--green:#9dff62;--purple:#ffe27a;--orange:#ff9f3f;--yellow:#ffe777;--text:#ddffc4;--muted:#93ad7f;--dim:#5c7151;--cab-glow:rgba(166,255,89,.38);--gauge-track:#1c301d;--gauge-fill:#a9ff67}body.theme-retro{font-family:Consolas,"Courier New",monospace}
+body.theme-daylight{color-scheme:light;--bg:#dbe5ee;--panel:#f8fbff;--panel2:#edf4fa;--line:#397dad;--blue:#075ea5;--green:#087f3f;--purple:#7137b8;--orange:#a84d00;--yellow:#8c6800;--red:#b51c27;--text:#0b1a26;--muted:#516677;--dim:#718391;--cab-glow:rgba(0,102,175,.2);--gauge-track:#c8d6e0;--gauge-fill:#0875c4}body.theme-daylight,body.theme-daylight html{background:#dbe5ee}body.theme-daylight .panel,body.theme-daylight .sidebar,body.theme-daylight .mobile-nav{background:#f8fbff}body.theme-daylight .cell,body.theme-daylight .system-chip,body.theme-daylight .instrument,body.theme-daylight .nav-card{background:#eef5fa}body.theme-daylight .gauge-face:before{background:#f7fbff;border-color:#6d8291}
+body.theme-contrast{--bg:#000;--panel:#000;--panel2:#070707;--line:#fff;--blue:#00c8ff;--green:#35ff35;--purple:#ff64ff;--orange:#ff9d00;--yellow:#ffff00;--red:#ff3030;--text:#fff;--muted:#e4e4e4;--dim:#bbb;--cab-glow:rgba(255,255,255,.35);--gauge-track:#353535;--gauge-fill:#00d9ff}body.theme-contrast .panel,body.theme-contrast .system-chip,body.theme-contrast .cell{border-width:2px}
+body.theme-night{--bg:#090000;--panel:#160404;--panel2:#220707;--line:#7c1919;--blue:#ff4a42;--green:#ff786f;--purple:#ff6961;--orange:#ff7b42;--yellow:#ffad5e;--red:#ff332b;--text:#ffd9d6;--muted:#c48a85;--dim:#7f5551;--cab-glow:rgba(255,58,48,.26);--gauge-track:#351010;--gauge-fill:#ff4a42}body.theme-night img{filter:brightness(.68) saturate(.7)}
+body.reduce-motion *,body.reduce-motion *:before,body.reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.hood-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.hood-specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding:12px}.hood-spec{background:var(--panel2);border:1px solid color-mix(in srgb,var(--line) 60%,transparent);border-radius:10px;padding:11px;min-height:68px}.hood-spec .k{font-size:10px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em}.hood-spec .v{font-size:16px;font-weight:900;margin-top:7px;overflow-wrap:anywhere}.hood-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}.hood-form label{font-size:11px;color:var(--muted);font-weight:800}.hood-form input,.hood-form textarea{width:100%;margin-top:5px}.hood-form .wide{grid-column:1/-1}.hood-form textarea{min-height:78px;resize:vertical}.hood-actions{display:flex;gap:8px;flex-wrap:wrap;padding:0 12px 12px}.hood-note{padding:10px 12px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.5}.hood-card{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;line-height:1.65;padding:14px;min-height:210px;color:var(--text)}
+.privacy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px}.privacy-choice{display:flex;gap:9px;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px;font-size:12px}.privacy-choice input{margin-top:2px;accent-color:var(--blue)}.garage-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px}.garage-card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px}.garage-card h3{margin:0 0 9px;color:var(--blue)}.garage-line{font-size:12px;margin-top:6px}.source-tag{font-size:9px;padding:3px 6px;border:1px solid var(--line);border-radius:99px;color:var(--muted);white-space:nowrap}.update-state{font-size:22px;font-weight:1000;margin:8px 0}.diagnostic-box{white-space:pre-wrap;font:12px/1.55 ui-monospace,Consolas,monospace;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px;max-height:230px;overflow:auto}
+@media(max-width:1000px){.hood-grid{grid-template-columns:1fr}.hood-specs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1000px){.garage-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.hood-specs,.hood-form,.privacy-grid,.garage-grid{grid-template-columns:1fr}.hood-form .wide{grid-column:auto}}
+@media(max-width:600px){.gauge-face{width:min(calc(118px * var(--gauge-scale)),100%)}.system-chip{min-height:70px}.system-chip .sys-icon{font-size:22px}}
+</style>
+<link rel="stylesheet" href="/app.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+</head>
+<body>
+<div id="toasts" class="toast-stack"></div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><img class="brand-logo" src="/kaws-ats-companion-logo.png" alt="KAW'S ATS Playground Companion"><div class="brand-main">KAW'S <span>ATS PLAYGROUND</span></div><div class="brand-sub">Live Companion v1.7.2</div></div>
+    <nav class="nav" id="sideNav">
+      <button class="nav-btn active" data-page="drive"><span class="nav-ico">▶</span>Drive</button>
+      <button class="nav-btn" data-page="studio"><span class="nav-ico">▦</span>Dashboard Studio</button>
+      <button class="nav-btn" data-page="commands"><span class="nav-ico">⌘</span>Command Center</button>
+      <button class="nav-btn" data-page="intelligence"><span class="nav-ico">✦</span>Convoy Intelligence</button>
+      <button class="nav-btn" data-page="convoy"><span class="nav-ico">◎</span>Convoy</button>
+      <button class="nav-btn" data-page="radar"><span class="nav-ico">⌖</span>Convoy Radar</button>
+      <button class="nav-btn" data-page="radio"><span class="nav-ico">◉</span>Companion CB</button>
+      <button class="nav-btn" data-page="navigation"><span class="nav-ico">➤</span>Navigation</button>
+      <button class="nav-btn" data-page="truck"><span class="nav-ico">▣</span>Truck Health</button>
+      <button class="nav-btn" data-page="hood"><span class="nav-ico">⚙</span>Under the Hood</button>
+      <button class="nav-btn" data-page="shift"><span class="nav-ico">⇅</span>Shift Coach</button>
+      <button class="nav-btn" data-page="trips"><span class="nav-ico">▤</span>Trips</button>
+      <button class="nav-btn" data-page="stats"><span class="nav-ico">▥</span>Stats</button>
+      <button class="nav-btn" data-page="mods"><span class="nav-ico">◆</span>Mods</button>
+      <button class="nav-btn" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
+      <button class="nav-btn" data-page="suggestions"><span class="nav-ico">💡</span>Suggestions</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="connection-mini">Telemetry<b id="sideConnection">CONNECTED</b></div></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-brand"><img class="topbar-logo" src="/kaws-ats-companion-logo.png" alt=""><div class="title">KAW'S <span class="blue">ATS PLAYGROUND</span><span class="pulse"></span>LIVE COMPANION</div></div>
+      <div class="top-status"><span id="topDot" class="live-dot"></span><b id="topStatus">CONNECTED</b><span class="muted" id="topHz">— Hz</span></div>
+    </div>
+
+    <section id="page-drive" class="page active">
+      <div class="status-grid">
+        <div class="panel status-card"><div><div class="big good" id="driveConnect">ATS TELEMETRY CONNECTED</div><div class="small">Live SCS telemetry stream</div></div></div>
+        <div class="panel status-card"><div><div class="small">Truck</div><div class="big" id="driveTruck">—</div></div></div>
+        <div class="panel status-card"><div><div class="small">Active Route</div><div class="big" id="driveRoute">—</div></div></div>
+        <div class="panel status-card"><div><div class="small">Trip Logger</div><div class="big good" id="driveTripStatus">STANDBY</div></div></div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="panel metric-card"><div class="label">Truck</div><div class="truck-name" id="truckName">—</div><img id="truckPhoto" class="truck-img" alt="Your selected truck"><div id="truckPhotoEmpty" class="truck-photo-empty">No photo selected for this truck.</div><div class="truck-photo-actions"><button id="chooseTruckPhoto" type="button">Choose photo</button><button id="removeTruckPhoto" class="secondary" type="button">Remove</button></div><div class="truck-photo-note">Stored only in this browser for the detected truck model.</div><input id="truckPhotoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden></div>
+        <div class="panel metric-card gauge-card speed-gauge" id="speedGauge"><div class="label">Speed</div><div class="gauge-face"><div class="gauge-center"><div class="metric" id="speed">0.0</div><div class="unit">MPH</div></div></div></div>
+        <div class="panel metric-card gauge-card rpm-gauge" id="rpmGauge"><div class="label">RPM</div><div class="gauge-face"><div class="gauge-center"><div class="metric" id="rpm">0</div><div class="unit" style="color:var(--purple)">RPM</div></div></div></div>
+        <div class="panel metric-card gauge-card fuel-gauge" id="fuelGauge"><div class="label">Fuel</div><div class="gauge-face"><div class="gauge-center"><div class="metric" id="fuel">0.0</div><div class="unit" style="color:var(--green)">GAL</div></div></div><div class="progress"><span id="fuelBar"></span></div></div>
+        <div class="panel metric-card"><div class="label">Gear</div><div class="metric" id="gear">—</div><div class="unit">CURRENT</div></div>
+      </div>
+
+      <div class="drive-lower">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Active Trip</div><div id="tripElapsedTop" class="muted">0:00</div></div>
+          <div class="trip-grid">
+            <div class="cell"><div class="k">Cargo</div><div class="v" id="tripCargo">—</div></div>
+            <div class="cell"><div class="k">Route</div><div class="v" id="tripRoute">—</div></div>
+            <div class="cell"><div class="k">Miles</div><div class="v" id="tripMiles">0.0 mi</div></div>
+            <div class="cell"><div class="k">Fuel Used</div><div class="v" id="tripFuel">0.0 gal</div></div>
+            <div class="cell"><div class="k">Max Speed</div><div class="v" id="tripMax">0 MPH</div></div>
+            <div class="cell"><div class="k">Speeding</div><div class="v" id="tripSpeeding">0:00</div></div>
+            <div class="cell"><div class="k">Navigation</div><div class="v" id="driveNav">0.0 mi</div></div>
+            <div class="cell"><div class="k">Income</div><div class="v" id="driveIncome">$0</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Quick Systems</div><div id="quickWarnings" class="muted">0 warnings</div></div>
+          <div class="system-grid" id="quickSystems"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="page-studio" class="page">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Dashboard Studio</div><div id="studioModeText" class="muted">EDIT MODE</div></div>
+        <div class="studio-toolbar">
+          <select id="layoutSelect" class="grow"></select>
+          <button id="newLayoutBtn" class="cmd">New Layout</button>
+          <button id="cloneLayoutBtn" class="cmd">Duplicate</button>
+          <button id="renameLayoutBtn" class="cmd">Rename</button>
+          <button id="saveLayoutBtn" class="cmd">Save</button>
+          <button id="setActiveLayoutBtn" class="cmd">Set Active</button>
+          <button id="exportLayoutBtn" class="cmd">Export</button>
+          <button id="importLayoutBtn" class="cmd">Import</button>
+          <button id="deleteLayoutBtn" class="cmd emergency">Delete</button>
+        </div>
+      </div>
+      <div class="studio-shell">
+        <div class="panel widget-library">
+          <input id="widgetSearch" class="widget-search" placeholder="Search widgets...">
+          <div id="widgetLibrary"></div>
+        </div>
+        <div class="canvas-wrap">
+          <div id="dashboardCanvas" class="dashboard-canvas"></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-head"><div class="panel-title">Presets</div><div class="muted">One click</div></div>
+        <div class="command-bar">
+          <button class="cmd preset-btn" data-preset="driving">Driving</button>
+          <button class="cmd preset-btn" data-preset="convoy">Convoy Command</button>
+          <button class="cmd preset-btn" data-preset="navigation">Navigation Focus</button>
+          <button class="cmd preset-btn" data-preset="shifting">18-Speed</button>
+          <button class="cmd preset-btn" data-preset="minimal">Minimal Night</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-commands" class="page">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Playground Command Center</div><div class="muted">Companion UI for bot-style actions</div></div>
+        <div class="command-grid" style="padding:10px">
+          <div class="panel command-card" data-action="current"><div class="cc-title">Current Trip</div><div class="cc-desc">Show the active job, cargo, route, miles, fuel and timing.</div><div class="cc-cmd">/ats current</div></div>
+          <div class="panel command-card" data-action="stats"><div class="cc-title">My Stats</div><div class="cc-desc">Lifetime local trip statistics recorded by this Companion.</div><div class="cc-cmd">/ats stats</div></div>
+          <div class="panel command-card" data-action="trips"><div class="cc-title">Recent Trips</div><div class="cc-desc">Display your latest deliveries and cancellations.</div><div class="cc-cmd">/ats trips</div></div>
+          <div class="panel command-card" data-action="convoy"><div class="cc-title">Convoy Status</div><div class="cc-desc">Show currently-known convoy drivers and route relationships.</div><div class="cc-cmd">/ats convoy</div></div>
+          <div class="panel command-card" data-action="truck"><div class="cc-title">My Truck</div><div class="cc-desc">Show live truck, fuel, damage, speed and systems information.</div><div class="cc-cmd">/ats truck</div></div>
+          <div class="panel command-card" data-action="help"><div class="cc-title">Command List</div><div class="cc-desc">Current Companion-side command shortcuts and future Discord equivalents.</div><div class="cc-cmd">/ats help</div></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Result</div></div><div id="commandOutput" class="command-output">Select an action above.</div></div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Current Bot Shortcuts</div><div class="muted">Local UI mappings</div></div><div class="table-wrap"><table class="table"><thead><tr><th>Shortcut</th><th>Purpose</th><th>Companion</th></tr></thead><tbody><tr><td>/ats current</td><td>Active trip</td><td class="good">Available</td></tr><tr><td>/ats stats</td><td>Driver stats</td><td class="good">Available</td></tr><tr><td>/ats trips</td><td>Recent trips</td><td class="good">Available</td></tr><tr><td>/ats convoy</td><td>Convoy roster</td><td class="good">Available</td></tr><tr><td>/ats truck</td><td>Truck status</td><td class="good">Available</td></tr><tr><td>/ats help</td><td>Command help</td><td class="good">Available</td></tr></tbody></table></div></div>
+    </section>
+
+
+    <section id="page-intelligence" class="page">
+      <div class="status-grid">
+        <div class="panel status-card"><div><div class="small">Convoy Intelligence</div><div class="big good">LOCAL SCANNER ONLINE</div></div></div>
+        <div class="panel status-card"><div><div class="small">Map DLC</div><div id="intelMapDlcCount" class="big">0</div></div></div>
+        <div class="panel status-card"><div><div class="small">Local Mods</div><div id="intelModCount" class="big">0</div></div></div>
+        <div class="panel status-card"><div><div class="small">Workshop Items</div><div id="intelWorkshopCount" class="big">0</div></div></div>
+      </div>
+
+      <div class="intel-grid">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">DLC & Mod Scanner</div><button id="rescanIntelBtn" class="cmd">Rescan</button></div>
+          <div id="dlcChips" class="dlc-chip-wrap"></div>
+          <div class="panel-head"><div class="panel-title">Detected Local Mods</div><div id="activeModInfo" class="muted"></div></div>
+          <div id="modList" class="mod-list"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Convoy Ready Check</div><div id="readyOverall" class="good">READY</div></div>
+          <div id="readinessList" class="readiness-list"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-head"><div class="panel-title">Shared-DLC Route Compatibility Planner</div><div class="muted">Compatibility estimate</div></div>
+        <div class="route-form">
+          <select id="routeOrigin"></select>
+          <select id="routeDestination"></select>
+          <button id="planRouteBtn" class="cmd">Check Route</button>
+        </div>
+        <div id="routeIntelResult" class="route-result muted">Choose an origin and destination.</div>
+      </div>
+
+      <div class="panel" style="margin-top:10px">
+        <div class="panel-head"><div class="panel-title">Truck / Load Suitability Advisor</div><div class="muted">Configurable advisory</div></div>
+        <div class="load-advisor">
+          <div class="load-profile">
+            <input id="truckHp" type="number" min="200" max="1200" value="500" placeholder="Horsepower">
+            <select id="truckDrivenAxles"><option value="1">1 driven axle</option><option value="2" selected>2 driven axles / 6x4</option><option value="3">3 driven axles / heavy-haul</option></select>
+            <select id="truckTrans"><option value="10">10-speed</option><option value="13">13-speed</option><option value="18" selected>18-speed</option></select>
+            <button id="loadAdviceBtn" class="cmd">Analyze Load</button>
+          </div>
+          <div style="display:flex;align-items:end;gap:18px;flex-wrap:wrap">
+            <div><div class="small muted">Suitability Score</div><div id="loadScore" class="load-score">—</div></div>
+            <div><div class="small muted">Rating</div><div id="loadRating" class="load-rating">—</div></div>
+            <div><div class="small muted">Load Class</div><div id="loadClass" class="load-rating">—</div></div>
+            <div><div class="small muted">Cargo</div><div id="loadCargo" class="load-rating">—</div></div>
+          </div>
+          <div id="loadNotes" style="margin-top:10px"></div>
+          <div class="muted" style="font-size:11px;margin-top:8px">This is a driver aid, not a hard game restriction. Modded engines/chassis/trailers and route grades can change actual capability.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-convoy" class="page">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Convoy Center</div><div id="convoySummary" class="convoy-summary"></div></div>
+        <div class="command-bar">
+          <button class="cmd" data-command="DEPART">Depart</button><button class="cmd" data-command="HOLD POSITION">Hold Position</button>
+          <button class="cmd" data-command="REGROUP">Regroup</button><button class="cmd" data-command="FUEL STOP">Fuel Stop</button>
+          <button class="cmd" data-command="REST STOP">Rest Stop</button><button class="cmd emergency" data-command="EMERGENCY STOP">Emergency Stop</button>
+          <button class="cmd" data-command="RESUME CONVOY">Resume Convoy</button>
+        </div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Driver</th><th>Version</th><th>Status</th><th>Truck</th><th>Speed</th><th>Cargo</th><th>Route</th><th>Remaining</th><th>Relation</th></tr></thead><tbody id="convoyRows"></tbody></table></div>
+      </div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Convoy Alerts / Commands</div><div class="muted">Latest</div></div><div id="commandFeed" style="padding:12px"></div></div>
+    </section>
+
+    <section id="page-radar" class="page"><div class="radar-layout"><div class="panel"><div class="panel-head"><div><div class="panel-title">Live Convoy Radar</div><div class="muted">Approximate position from paired Companion drivers</div></div><div id="radarOnline" class="good">0 ONLINE</div></div><div class="radar-stage"><canvas id="radarCanvas" class="radar-canvas" width="720" height="720"></canvas></div><div class="radar-controls"><label>Range<br><select id="radarRange"><option>1</option><option>5</option><option selected>10</option><option>25</option><option>50</option></select></label><label>View<br><select id="radarOrientation"><option value="heading">Heading up</option><option value="north">North up</option></select></label><label>Separation alert<br><select id="separationMiles"><option>1</option><option selected>3</option><option>5</option><option>10</option></select></label><label><br><button id="radarSpeakToggle" class="cmd">Spoken alerts: ON</button></label></div></div><div><div class="panel"><div class="panel-head"><div class="panel-title">Driver Positions</div><div class="muted">Ahead / behind / stopped</div></div><div id="radarRoster"><div class="placeholder">Waiting for convoy drivers…</div></div></div><div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Voice Co-Driver</div><div id="voiceSupport" class="muted">Checking browser…</div></div><div class="voice-box"><button id="voiceAsk" class="voice-button">🎙 PRESS TO ASK</button><div class="form-row" style="margin-top:10px"><div class="form-field"><label>Listening mode</label><select id="voiceMode" class="voice-control"><option value="push">Push to ask</option><option value="wake">Wake word: Hey KAW</option><option value="off">Off</option></select></div><div class="form-field"><label>Keyboard / Stream Deck hotkey</label><input id="voiceHotkey" class="voice-control" value="V" maxlength="1"></div></div><div class="form-row"><div class="form-field"><label>Controller button</label><input id="voiceGamepad" class="voice-control" type="number" min="0" max="31" value="1"></div><div class="form-field"><label>Voice replies</label><select id="voiceReplies" class="voice-control"><option value="on">Speak answers</option><option value="off">Text only</option></select></div></div><div id="voiceAnswer" class="voice-answer">Try: “Where is Ricky Bobby?”, “Who is behind?”, “Is everybody moving?”, “How is my fuel?”, or “Regroup.”</div><div class="muted" style="font-size:11px;margin-top:8px">Chrome and Edge offer the best speech recognition. Safari support varies; Firefox can use the text command box below. Stream Deck can send the selected hotkey.</div><div style="display:flex;gap:7px;margin-top:9px"><input id="voiceText" class="voice-control" style="flex:1" placeholder="Type a co-driver command"><button id="voiceTextSend" class="cmd">Ask</button></div></div></div><div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Smart Convoy Alerts</div><button id="clearRadarAlerts" class="cmd">Clear</button></div><div id="radarAlerts" style="padding:6px 12px"><span class="muted">No active alerts.</span></div></div></div></div></section>
+
+    <section id="page-radio" class="page"><div class="radio-launch"><div class="panel radio-banner"><div><div class="panel-title">KAW'S Companion CB Radio</div><div class="muted" style="margin-top:5px">Secure push-to-talk voice, typed chat, voice-to-text and convoy channels. This is separate from TruckersMP's internal CB.</div></div><a class="radio-open" href="https://p01--kaw-relay--4h7w2xmhzqqq.code.run/radio" target="_blank" rel="noopener">OPEN SECURE RADIO</a></div><iframe class="radio-frame" title="KAW'S Companion CB Radio" src="https://p01--kaw-relay--4h7w2xmhzqqq.code.run/radio" allow="microphone"></iframe></div></section>
+
+    <section id="page-navigation" class="page">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Navigation Intelligence</div><div class="muted">SCS telemetry navigation</div></div>
+        <div class="nav-grid">
+          <div class="nav-card"><div class="label">Route Progress</div><div class="v" id="navProgress">—</div><div class="progress"><span id="navProgressBar"></span></div></div>
+          <div class="nav-card"><div class="label">Remaining</div><div class="v" id="navRemaining">—</div></div>
+          <div class="nav-card"><div class="label">ETA</div><div class="v" id="navEta">—</div></div>
+          <div class="nav-card"><div class="label">Speed Limit</div><div class="v" id="navLimit">—</div></div>
+          <div class="nav-card"><div class="label">Delivery Window</div><div class="v" id="navDeadline">—</div></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Navigation Co-Pilot</div><button id="navVoiceToggle" class="cmd">Voice guidance: ON</button></div><div class="nav-copilot"><div class="copilot-card"><div class="k">Compass heading</div><div id="navHeading" class="v">—</div></div><div class="copilot-card"><div class="k">Nearest convoy driver</div><div id="navNearest" class="v">—</div></div><div class="copilot-card"><div class="k">Arrival estimate</div><div id="navArrival" class="v">—</div></div><div class="copilot-card"><div class="k">Co-pilot status</div><div id="navVoiceStatus" class="v good">READY</div></div></div><div class="radar-controls"><label>Automatic announcements<br><select id="navVoiceFrequency"><option value="milestones">Route milestones</option><option value="frequent">Frequent updates</option><option value="critical">Critical alerts only</option></select></label><label>Overspeed warning<br><select id="navOverspeed"><option value="5">5 MPH over</option><option value="10" selected>10 MPH over</option><option value="15">15 MPH over</option><option value="0">Off</option></select></label><label>Map view<br><select id="navMapStyle"><option value="geographic">Geographic</option><option value="night">Night GPS</option><option value="tactical">Tactical Convoy</option><option value="minimal">Minimal Route</option></select></label><label>Map framing<br><select id="navMapFrame"><option value="route">Fit active route</option><option value="region">North America</option><option value="follow">Follow progress</option><option value="convoy">Whole convoy</option><option value="leader">Follow the convoy leader</option></select></label><label>Map refresh rate<br><select id="navRefreshRate"><option value="1">1 Hz • Battery saver</option><option value="2">2 Hz • Smooth</option><option value="5" selected>5 Hz • Live</option><option value="10">10 Hz • Ultra</option></select></label><button id="navSpeakNow" class="cmd">Speak Route Update</button><button id="navFullscreen" class="cmd">Open Fullscreen Map</button></div></div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Cab Services Intelligence</div><div class="muted">Live telemetry guidance</div></div><div class="cab-grid"><div class="cab-card"><div class="k">Fuel range</div><div class="v" id="cabFuelRange">—</div></div><div class="cab-card"><div class="k">Rest due</div><div class="v" id="cabRestDue">—</div></div><div class="cab-card"><div class="k">Repair status</div><div class="v" id="cabRepair">—</div></div><div class="cab-card"><div class="k">Next fuel / rest / repair</div><div class="v" style="font-size:13px">Use ATS Route Advisor</div></div></div></div><div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">KAW Geographic Navigation</div><div id="mapAccuracy" class="muted">Public-domain geography + estimated ATS route placement</div></div><div style="padding:10px"><canvas id="routeCanvas" class="route-canvas" width="1000" height="520"></canvas></div></div>
+    </section>
+
+    <section id="page-truck" class="page">
+      <div class="ops-grid">
+        <div class="panel"><div class="panel-head"><div class="panel-title">Truck Health & Damage</div><div id="healthOverall" class="good">HEALTHY</div></div><div style="padding:12px" id="damageRows"></div></div>
+        <div class="panel"><div class="panel-head"><div class="panel-title">Lights & Systems</div><div id="warningCount" class="muted">0 warnings</div></div><div class="system-grid" id="systemsGrid"></div></div>
+      </div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Driver Instruments</div><div id="instrumentGear">GEAR —</div></div><div class="instrument-grid" id="instrumentGrid"></div></div>
+    </section>
+
+    <section id="page-hood" class="page">
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">What's Under the Hood?</div><div class="muted" style="margin-top:4px">Live truck, drivetrain and trailer build sheet</div></div><div id="hoodDetected" class="good">WAITING FOR ATS</div></div>
+      </div>
+      <div class="hood-grid" style="margin-top:10px">
+        <div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Detected by ATS</div><div class="muted">Updates automatically</div></div><div id="hoodLiveSpecs" class="hood-specs"></div><div class="hood-note">Exact engine model, horsepower, brake package and some modded accessories are not included in standard ATS telemetry. Those can be saved in Your Build Details.</div></div>
+          <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Trailer & Load</div><div id="hoodTrailerStatus" class="muted">NO TRAILER</div></div><div id="hoodTrailerSpecs" class="hood-specs"></div></div>
+        </div>
+        <div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Your Build Details</div><div class="muted">Saved per detected truck</div></div><div class="hood-form">
+            <label>Engine model<input id="hoodEngine" placeholder="Example: Cummins X15"></label><label>Horsepower<input id="hoodHp" inputmode="numeric" placeholder="Example: 605 HP"></label>
+            <label>Torque<input id="hoodTorque" placeholder="Example: 2,050 lb-ft"></label><label>Transmission model<input id="hoodTransmission" placeholder="Example: Eaton Fuller 18-speed"></label>
+            <label>Brake setup<input id="hoodBrakes" placeholder="Example: Air disc brakes"></label><label>Chassis / suspension<input id="hoodChassis" placeholder="Example: 6x4 air ride"></label>
+            <label class="wide">Accessories and notes<textarea id="hoodNotes" placeholder="Turbo, exhaust, axle ratio, tires, tuning, mod name, or anything convoy members may ask about..."></textarea></label>
+          </div><div class="hood-actions"><button id="hoodSave" class="cmd">Save Build</button><button id="hoodClear" class="cmd secondary">Clear</button><button id="hoodCopy" class="cmd">Copy Build Card</button><button id="hoodDownloadCard" class="cmd">Download Picture Card</button><button id="hoodExport" class="cmd">Export Backup</button><button id="hoodImport" class="cmd">Import Backup</button><input id="hoodImportFile" type="file" accept="application/json,.json" hidden></div></div>
+          <div class="panel" style="margin-top:10px"><div class="panel-head"><div><div class="panel-title">Convoy Sharing & Privacy</div><div class="muted" style="margin-top:4px">You control what leaves this computer</div></div><span class="source-tag">YOUR CONTROL</span></div><div class="privacy-grid"><label class="privacy-choice"><input id="shareIdentity" type="checkbox" checked><span><b>Truck identity</b><br><span class="muted">Make and model</span></span></label><label class="privacy-choice"><input id="shareSpecs" type="checkbox" checked><span><b>Detected specifications</b><br><span class="muted">Transmission, gearing and wheel layout</span></span></label><label class="privacy-choice"><input id="shareTrailer" type="checkbox" checked><span><b>Trailer and cargo</b><br><span class="muted">Attached trailer and current load</span></span></label><label class="privacy-choice"><input id="shareCustom" type="checkbox"><span><b>Your entered build</b><br><span class="muted">Engine, horsepower, brakes and notes</span></span></label><label class="privacy-choice"><input id="sharePlate" type="checkbox"><span><b>License plates</b><br><span class="muted">Truck and trailer plates</span></span></label><label class="privacy-choice"><input id="shareLocation" type="checkbox" checked><span><b>Convoy radar location</b><br><span class="muted">Approximate position with paired convoy</span></span></label><label class="privacy-choice"><input id="shareSpeed" type="checkbox" checked><span><b>Live speed</b><br><span class="muted">Moving/stopped and catch-up guidance</span></span></label><label class="privacy-choice"><input id="shareStatus" type="checkbox" checked><span><b>Vehicle status</b><br><span class="muted">Lights, warnings and parked state</span></span></label><label class="privacy-choice"><input id="shareRoute" type="checkbox" checked><span><b>Route progress</b><br><span class="muted">Origin, destination and remaining miles</span></span></label><label class="privacy-choice"><input id="shareDamage" type="checkbox"><span><b>Damage alerts</b><br><span class="muted">Off by default; enables incident detection</span></span></label></div></div>
+          <div class="panel" style="margin-top:10px"><div class="panel-head"><div class="panel-title">Shareable Build Card</div><div class="muted">Ready to paste into Discord or chat</div></div><div id="hoodBuildCard" class="hood-card">Connect ATS to build your truck card.</div></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:10px"><div class="panel-head"><div><div class="panel-title">Convoy Garage</div><div class="muted" style="margin-top:4px">Builds shared by connected Companion drivers</div></div><div id="garageCount" class="good">0 SHARED BUILDS</div></div><div id="garageGrid" class="garage-grid"><div class="muted">No shared convoy builds are online yet.</div></div></div>
+    </section>
+
+    <section id="page-shift" class="page">
+      <div class="coach-layout">
+        <div class="panel coach-main">
+          <div class="panel-title">Live Shift Coach</div>
+          <div class="gear-display" id="coachGear">—</div>
+          <div class="coach-action" id="coachAction">HOLD</div>
+          <div class="coach-detail" id="coachDetail">Waiting for transmission data</div>
+          <div class="range-row">
+            <div class="range-box"><div class="rk">Range</div><div class="rv" id="coachRange">—</div></div>
+            <div class="range-box"><div class="rk">Split</div><div class="rv" id="coachSplit">—</div></div>
+            <div class="range-box"><div class="rk">RPM Band</div><div class="rv" id="coachBand">—</div></div>
+          </div>
+        </div>
+        <div class="panel coach-settings">
+          <div class="panel-title" style="margin-bottom:14px">Transmission Profile</div>
+          <div class="form-row">
+            <div class="form-field"><label>Transmission</label><select id="transmissionProfile"><option value="auto">Automatic / AMT</option><option value="10">10-Speed Manual</option><option value="13">13-Speed Manual</option><option value="18">18-Speed Manual</option><option value="custom">Custom Manual</option></select></div>
+            <div class="form-field"><label>Coach Mode</label><select id="coachMode"><option value="economy">Economy</option><option value="normal">Normal</option><option value="performance">Performance</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field"><label>Custom Upshift RPM</label><input id="customUp" type="number" value="1600" min="900" max="2500"></div>
+            <div class="form-field"><label>Custom Downshift RPM</label><input id="customDown" type="number" value="1100" min="500" max="1800"></div>
+          </div>
+          <p class="muted" style="line-height:1.5">Range/split indicators use the transmission profile you select. ATS telemetry gives us gear and RPM, but transmission layouts vary by truck/mod, so this coach is configurable instead of assuming every gearbox is identical.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-trips" class="page">
+      <div class="panel"><div class="panel-head"><div class="panel-title">Recent Trips</div><div class="muted">Persistent logbook</div></div><div class="table-wrap"><table class="table"><thead><tr><th>Status</th><th>Cargo</th><th>Route</th><th>Miles</th><th>Income</th><th>Fuel</th><th>Finished</th></tr></thead><tbody id="tripRows"></tbody></table></div></div>
+    </section>
+
+    <section id="page-stats" class="page">
+      <div class="stats-grid">
+        <div class="panel stat"><div class="sk">Total Trips</div><div id="statTrips" class="sv">0</div></div>
+        <div class="panel stat"><div class="sk">Delivered</div><div id="statDelivered" class="sv good">0</div></div>
+        <div class="panel stat"><div class="sk">Total Miles</div><div id="statMiles" class="sv">0.0</div></div>
+        <div class="panel stat"><div class="sk">Total Income</div><div id="statIncome" class="sv good">$0</div></div>
+        <div class="panel stat"><div class="sk">Fuel Used</div><div id="statFuel" class="sv">0.0 gal</div></div>
+        <div class="panel stat"><div class="sk">Speeding Time</div><div id="statSpeeding" class="sv warn">0:00</div></div>
+        <div class="panel stat"><div class="sk">Current Odometer</div><div id="statOdo" class="sv">0.0 mi</div></div>
+        <div class="panel stat"><div class="sk">Fuel Range</div><div id="statRange" class="sv">—</div></div>
+      </div>
+    </section>
+
+    <section id="page-mods" class="page">
+      <div class="panel placeholder"><div class="ph-title">Convoy Mod Pack Manager</div><p>This page is reserved for the mod problem we originally set out to solve: required-mod manifests, missing/extra mods, version checks, and load-order validation. The UI shell is now in place; the actual local mod scanner/relay comes after convoy networking so every driver gets the same readiness result.</p></div>
+    </section>
+
+    <section id="page-suggestions" class="page"><div class="suggest-layout"><div class="panel"><div class="panel-head"><div><div class="panel-title">Suggestions & Feedback</div><div class="muted">Help shape the next Companion release</div></div></div><div class="suggest-form"><div class="form-field"><label>Category</label><select id="suggestCategory" class="voice-control"><option>Navigation / GPS</option><option>Convoy</option><option>Companion CB</option><option>Radio</option><option>Dashboard / Skins</option><option>Stream Deck / Controls</option><option>Bug Report</option><option>Other</option></select></div><div class="form-field" style="margin-top:10px"><label>Suggestion title</label><input id="suggestTitle" class="voice-control" maxlength="100" placeholder="Short name for the idea"></div><div class="form-field" style="margin-top:10px"><label>What should it do?</label><textarea id="suggestBody" class="voice-control" maxlength="2000" placeholder="Describe the idea, why it would help, and how you imagine it working."></textarea></div><label class="privacy-choice" style="margin-top:10px"><input id="suggestDiagnostics" type="checkbox"><span><b>Include safe diagnostics</b><br><span class="muted">Version and connection status only—never PINs or pairing secrets</span></span></label><div class="suggest-actions"><button id="suggestSave" class="cmd">Save Suggestion</button><button id="suggestCopy" class="cmd">Copy for Discord</button><a class="cmd" href="https://github.com/devkawteam/kaws-ats-companion-downloads/issues/new" target="_blank" rel="noopener" style="text-decoration:none">Open Public Request</a></div><div class="muted" style="font-size:11px;margin-top:10px">Saved suggestions stay on this device. Copy them into the ATS suggestions channel, or open a public request on GitHub.</div></div></div><div class="panel"><div class="panel-head"><div class="panel-title">My Saved Suggestions</div><button id="suggestExport" class="cmd">Export All</button></div><div id="suggestList"><div class="placeholder">No saved suggestions yet.</div></div></div></div></section>
+
+    <section id="page-settings" class="page">
+      <div class="settings-grid">
+        <div class="panel setting"><div><b>Companion Updates</b><div id="updateState" class="update-state">CHECKING…</div><div id="updateDetail" class="muted" style="line-height:1.5">Checking the official KAW GitHub release.</div></div><div class="hood-actions" style="padding:12px 0 0"><button id="checkUpdate" class="cmd">Check Now</button><a id="updateDownload" class="cmd" href="https://github.com/devkawteam/kaws-ats-companion-downloads/releases/latest" target="_blank" rel="noopener" style="display:none;text-decoration:none">Download Update</a></div></div>
+        <div class="panel setting"><div><b>Support Diagnostics</b><div class="muted setting-help">Creates a safe report with versions and connection status. Pairing secrets and radio PINs are never included.</div><div id="diagnosticBox" class="diagnostic-box">Preparing diagnostics…</div><button id="copyDiagnostics" class="cmd" style="margin-top:10px">Copy Diagnostics</button></div></div>
+        <div class="panel setting appearance-setting"><b>Cab Skin</b><div class="muted setting-help">Change the dashboard appearance without changing telemetry.</div><select id="themeSelect" class="setting-control"><option value="kaw">KAW Digital</option><option value="classic">Classic Cab</option><option value="modern">Modern Cab</option><option value="retro">Retro Cab</option><option value="daylight">Daylight</option><option value="contrast">High Contrast</option><option value="night">Night Drive</option></select></div>
+        <div class="panel setting appearance-setting"><b>Gauge Style</b><div class="muted setting-help">Choose large digital readouts or illuminated cab-style gauges.</div><select id="gaugeStyle" class="setting-control"><option value="digital">Digital</option><option value="analog">Analog Cab</option><option value="hybrid">Hybrid</option></select></div>
+        <div class="panel setting appearance-setting"><label for="fontScale"><b>Text Size</b> <span id="fontScaleValue">100%</span></label><input id="fontScale" class="setting-range" type="range" min="85" max="140" step="5" value="100"><div class="muted setting-help">Increase important labels and readings for tablets or distant monitors.</div></div>
+        <div class="panel setting appearance-setting"><label for="gaugeScale"><b>Gauge Size</b> <span id="gaugeScaleValue">100%</span></label><input id="gaugeScale" class="setting-range" type="range" min="85" max="135" step="5" value="100"><div class="muted setting-help">Adjust the instrument faces independently from text.</div></div>
+        <div class="panel setting appearance-setting"><b>Dashboard Density</b><div class="muted setting-help">Compact fits more widgets; large touch adds space for driving and tablets.</div><select id="densitySelect" class="setting-control"><option value="compact">Compact</option><option value="standard">Standard</option><option value="touch">Large Touch</option></select></div>
+        <div class="panel setting appearance-setting"><b>Device Layout Profile</b><div class="muted setting-help">Quickly tune the interface for the screen in front of you.</div><select id="deviceProfile" class="setting-control"><option value="auto">Automatic</option><option value="phone">Phone</option><option value="tablet">Tablet / iPad</option><option value="monitor">Second Monitor</option><option value="streamdeck">Stream Deck Display</option></select><button id="applyDeviceProfile" class="cmd" style="margin-top:9px">Apply Profile</button></div>
+        <div class="panel setting"><div class="toggle-row"><div><b>Reduced Motion</b><div class="muted setting-help">Turns off flashes and animated indicators for comfort.</div></div><div id="motionToggle" class="switch"></div></div></div>
+        <div class="panel setting"><div class="toggle-row"><div><b>Convoy Alert Sounds</b><div class="muted" style="font-size:12px;margin-top:3px">Join, leave, route changes and critical events</div></div><div id="soundToggle" class="switch"></div></div><button id="testSound" class="cmd" style="margin-top:12px">Test Join Alert</button></div>
+        <div class="panel setting"><div><b>Visual Screen Flash</b><div class="muted" style="font-size:12px;margin-top:3px">Edge flash for convoy events</div></div><div id="flashToggle" class="switch" style="margin-top:12px"></div></div>
+        <div class="panel setting"><div><b>Mobile / Tablet Layout</b><div class="muted" style="font-size:12px;margin-top:5px;line-height:1.5">Responsive navigation is automatic. On phones/tablets the sidebar becomes a bottom navigation bar.</div></div></div>
+        <div class="panel setting"><div><b>LAN Second-Screen Mode</b><div class="muted" style="font-size:12px;margin-top:5px;line-height:1.5">For a tablet on your private Wi‑Fi, set <code>dashboardHost</code> to <code>0.0.0.0</code> in config.json and restart. Keep this private-network only; community-wide access will use the future hosted relay.</div></div></div>
+        <div class="panel setting"><div><b>Multi-Screen Widget Popouts</b><div class="muted" style="font-size:12px;margin-top:5px;line-height:1.5">Open individual live widgets on extra monitors. On an iPad or another computer, use this Companion's private-network address with the widget link.</div><div class="popout-links"><button class="cmd" data-popout="speed">Speed</button><button class="cmd" data-popout="rpm">RPM</button><button class="cmd" data-popout="gear">Gear</button><button class="cmd" data-popout="lights">Cab Lights</button><button class="cmd" data-popout="nav">Navigation</button><button class="cmd" data-popout="fuel">Fuel</button><button class="cmd" data-popout="health">Damage</button><button class="cmd" data-popout="convoy">Convoy</button></div></div></div>
+      </div>
+    </section>
+
+    <div class="footer">KAW'S ATS PLAYGROUND COMPANION • v1.7.2</div>
+  </main>
+</div>
+
+<nav class="mobile-nav" id="mobileNav">
+  <button class="active" data-page="drive"><span>▶</span>Drive</button><button data-page="radar"><span>⌖</span>Radar</button><button data-page="navigation"><span>➤</span>Nav</button><button data-page="truck"><span>▣</span>Truck</button><button id="mobileMoreBtn" type="button"><span>•••</span>More</button>
+</nav>
+<div class="mobile-more-sheet" id="mobileMoreSheet" aria-hidden="true"><div class="mobile-more-card"><div class="mobile-more-head"><b>Companion Pages</b><button id="mobileMoreClose" type="button" aria-label="Close menu">×</button></div><div class="mobile-more-grid"><button data-page="convoy">◎ Convoy Center</button><button data-page="radio">◉ Companion CB</button><button data-page="studio">▦ Dashboard Studio</button><button data-page="commands">⌘ Command Center</button><button data-page="intelligence">✦ Convoy Intelligence</button><button data-page="hood">⚙ Under the Hood</button><button data-page="shift">⇅ Shift Coach</button><button data-page="trips">▤ Trips</button><button data-page="stats">▥ Stats</button><button data-page="mods">◆ Mods</button><button data-page="suggestions">💡 Suggestions</button><button data-page="settings">⚙ Settings</button></div></div></div>
+<main id="widgetPopout" class="widget-popout"><section class="popout-card"><div id="popoutTitle" class="popout-title">Live Widget</div><div id="popoutBody" class="popout-body">Waiting for telemetry…</div></section></main>
+
+<script>
+const $=id=>document.getElementById(id);
+const finite=v=>v!==null&&v!==undefined&&v!==''&&typeof v!=='boolean'&&Number.isFinite(Number(v));
+const f0=v=>finite(v)?Math.round(Number(v)).toLocaleString():'0';
+const f1=v=>finite(v)?Number(v).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1}):'0.0';
+const money=v=>finite(v)?Number(v).toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0}):'$0';
+let lastFetch=performance.now(),emaHz=0,lastRoster=new Map(),lastCommandId=null,audioCtx=null;
+const routeTrace=[];
+let routeProgressState={key:'',startRemaining:null,lastRemaining:null,progress:0};
+let naturalEarth=null;fetch('/natural-earth-na.json').then(r=>r.json()).then(x=>naturalEarth=x).catch(()=>{});
+const cityKey=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function findMapCity(name){if(!naturalEarth||!name)return null;const key=cityKey(name);return naturalEarth.cities.find(x=>cityKey(x.name)===key)||naturalEarth.cities.find(x=>cityKey(x.name).includes(key)||key.includes(cityKey(x.name)))}
+function liveRouteProgress(d){const key=[d?.job?.originCity,d?.job?.destinationCity,d?.job?.cargo].join('|'),remaining=Number(d?.navigation?.distanceMiles),reported=Number(d?.navigation?.progressPercent);if(key!==routeProgressState.key)routeProgressState={key,startRemaining:Number.isFinite(remaining)?remaining:null,lastRemaining:Number.isFinite(remaining)?remaining:null,progress:Number.isFinite(reported)?reported:0};if(Number.isFinite(remaining)){if(routeProgressState.startRemaining==null)routeProgressState.startRemaining=remaining;if(routeProgressState.lastRemaining==null||remaining<routeProgressState.lastRemaining)routeProgressState.lastRemaining=remaining;const sessionProgress=routeProgressState.startRemaining>0?(1-remaining/routeProgressState.startRemaining)*100:0;routeProgressState.progress=Math.max(routeProgressState.progress,Number.isFinite(reported)?reported:0,sessionProgress)}return Math.max(0,Math.min(100,routeProgressState.progress))/100}
+function drawTacticalMap(ctx,c){const pts=routeTrace;if(!pts.length){ctx.fillStyle='#668197';ctx.font='22px Segoe UI';ctx.textAlign='center';ctx.fillText('Start driving to create a live route trace',c.width/2,c.height/2);ctx.textAlign='left';return}const xs=pts.map(p=>p.x),zs=pts.map(p=>p.z),minX=Math.min(...xs),maxX=Math.max(...xs),minZ=Math.min(...zs),maxZ=Math.max(...zs),sx=(c.width-70)/Math.max(60,maxX-minX),sz=(c.height-70)/Math.max(60,maxZ-minZ),s=Math.min(sx,sz);ctx.strokeStyle='#168cff';ctx.lineWidth=6;ctx.lineJoin='round';ctx.beginPath();pts.forEach((p,i)=>{const x=35+(p.x-minX)*s,y=c.height-35-(p.z-minZ)*s;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();const p=pts.at(-1),x=35+(p.x-minX)*s,y=c.height-35-(p.z-minZ)*s;ctx.fillStyle='#2cff79';ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fill()}
+function drawGeographicMap(ctx,c,d){const origin=findMapCity(d?.job?.originCity),dest=findMapCity(d?.job?.destinationCity);let bounds=[-128,22,-64,55],progress=Math.max(0,Math.min(1,Number(d?.navigation?.progressPercent||0)/100));if(origin&&dest&&prefs.navMapFrame!=='region'){const pad=prefs.navMapFrame==='follow'?5:Math.max(4,Math.abs(dest.lon-origin.lon)*.18,Math.abs(dest.lat-origin.lat)*.3),lon=origin.lon+(dest.lon-origin.lon)*progress,lat=origin.lat+(dest.lat-origin.lat)*progress;bounds=prefs.navMapFrame==='follow'?[lon-pad,lat-pad*.55,lon+pad,lat+pad*.55]:[Math.min(origin.lon,dest.lon)-pad,Math.min(origin.lat,dest.lat)-pad*.55,Math.max(origin.lon,dest.lon)+pad,Math.max(origin.lat,dest.lat)+pad*.55]}const [minLon,minLat,maxLon,maxLat]=bounds,project=(lon,lat)=>[30+(lon-minLon)/(maxLon-minLon)*(c.width-60),c.height-30-(lat-minLat)/(maxLat-minLat)*(c.height-60)],style=prefs.navMapStyle;ctx.fillStyle=style==='night'?'#020714':style==='minimal'?'#020912':'#061827';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle=style==='night'?'#233b68':'#1c526d';ctx.lineWidth=1;for(const r of naturalEarth.regions){for(const ring of r.parts){ctx.beginPath();let used=false;ring.forEach(([lon,lat])=>{const [x,y]=project(lon,lat);if(!used){ctx.moveTo(x,y);used=true}else ctx.lineTo(x,y)});ctx.stroke()}}if(style!=='minimal'){ctx.fillStyle=style==='night'?'#8aa2d5':'#7ea1b5';ctx.font='13px Segoe UI';for(const city of naturalEarth.cities.filter(x=>x.rank<=5&&x.lon>=minLon&&x.lon<=maxLon&&x.lat>=minLat&&x.lat<=maxLat)){const [x,y]=project(city.lon,city.lat);ctx.fillRect(x-1,y-1,3,3);ctx.fillText(city.name,x+5,y+4)}}if(origin&&dest){const [ox,oy]=project(origin.lon,origin.lat),[dx,dy]=project(dest.lon,dest.lat),tx=ox+(dx-ox)*progress,ty=oy+(dy-oy)*progress;ctx.strokeStyle=style==='night'?'#bb5cff':'#2a8fff';ctx.lineWidth=7;ctx.setLineDash([16,9]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(dx,dy);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fff';ctx.font='bold 17px Segoe UI';ctx.fillText(d.job.originCity,ox+9,oy-9);ctx.fillText(d.job.destinationCity,dx+9,dy-9);ctx.fillStyle='#53ed63';ctx.beginPath();ctx.arc(tx,ty,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#53ed63';ctx.font='bold 16px Segoe UI';ctx.fillText(`YOU • ${Math.round(progress*100)}%`,tx+17,ty+6);for(const p of d?.convoy?.roster||[]){if(p.isLocal||!p.online)continue;const po=findMapCity(p.job?.originCity),pd=findMapCity(p.job?.destinationCity);if(!po||!pd)continue;const pp=Math.max(0,Math.min(1,Number(p.navigation?.progressPercent||0)/100)),[px,py]=project(po.lon+(pd.lon-po.lon)*pp,po.lat+(pd.lat-po.lat)*pp);ctx.fillStyle='#ffca3a';ctx.beginPath();ctx.arc(px,py,8,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 13px Segoe UI';ctx.fillText(p.driverName||'Driver',px+11,py+4)}$('mapAccuracy').textContent='ESTIMATED POSITION • Public-domain Natural Earth geography'}else{$('mapAccuracy').textContent='Route cities unavailable • showing regional geographic reference';ctx.fillStyle='#9bb4c5';ctx.font='22px Segoe UI';ctx.textAlign='center';ctx.fillText('Choose an ATS job to plot origin, destination and estimated progress',c.width/2,c.height-45);ctx.textAlign='left'}ctx.fillStyle='#7390a4';ctx.font='12px Segoe UI';ctx.fillText('Geography: Natural Earth • Route placement is approximate',18,c.height-12)}
+function drawRouteTrace(pos,d=latestTelemetry){if(finite(pos?.x)&&finite(pos?.z)){const last=routeTrace.at(-1);if(!last||Math.hypot(pos.x-last.x,pos.z-last.z)>2)routeTrace.push({x:Number(pos.x),z:Number(pos.z)});if(routeTrace.length>700)routeTrace.shift()}const c=$('routeCanvas');if(!c)return;const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);const mapData=d?{...d,navigation:{...(d.navigation||{}),progressPercent:liveRouteProgress(d)*100}}:d;if(prefs.navMapStyle==='tactical'||!naturalEarth)drawTacticalMap(ctx,c);else drawGeographicMap(ctx,c,mapData);const status=$('mapAccuracy');if(status&&d?.connected)status.textContent+=` • LIVE ${Number(prefs.navRefreshRate)||5} Hz • ${new Date().toLocaleTimeString()}`}
+function renderPopout(d){if(!popoutWidget)return;const allowed=new Set(['speed','rpm','fuel','gear','lights','nav','health','convoy']);const id=allowed.has(popoutWidget)?popoutWidget:'speed';$('popoutTitle').textContent=widgetCatalog[id]?.title||'Live Widget';$('popoutBody').innerHTML=widgetInner(id,d)}
+const prefs=JSON.parse(localStorage.getItem('kawPrefs')||'{}');
+prefs.sound ??= true;prefs.flash ??= true;prefs.transmission ??='18';prefs.coachMode??='normal';prefs.customUp??=1600;prefs.customDown??=1100;prefs.theme??='kaw';prefs.gaugeStyle??='digital';prefs.fontScale??=100;prefs.gaugeScale??=100;prefs.density??='standard';prefs.reducedMotion??=false;prefs.deviceProfile??='auto';
+prefs.radarRange??=10;prefs.separationMiles??=3;prefs.radarOrientation??='heading';prefs.radarSpeak??=true;prefs.voiceMode??='push';prefs.voiceHotkey??='V';prefs.voiceGamepad??=1;prefs.voiceReplies??=true;
+prefs.navVoice??=true;prefs.navVoiceFrequency??='milestones';prefs.navOverspeed??=10;prefs.navMapStyle??='road';prefs.navMapFrame??='route';prefs.navRefreshRate??=5;
+function savePrefs(){localStorage.setItem('kawPrefs',JSON.stringify(prefs))}
+function applyAppearance(){
+ const themes=['kaw','classic','modern','retro','daylight','contrast','night'],gauges=['digital','analog','hybrid'],densities=['compact','standard','touch'];
+ document.body.classList.remove(...themes.map(x=>`theme-${x}`),...gauges.map(x=>`gauges-${x}`),...densities.map(x=>`density-${x}`),'reduce-motion');
+ document.body.classList.add(`theme-${themes.includes(prefs.theme)?prefs.theme:'kaw'}`,`gauges-${gauges.includes(prefs.gaugeStyle)?prefs.gaugeStyle:'digital'}`,`density-${densities.includes(prefs.density)?prefs.density:'standard'}`);document.body.classList.toggle('reduce-motion',!!prefs.reducedMotion);
+ document.documentElement.style.setProperty('--font-scale',String(Math.max(.85,Math.min(1.4,Number(prefs.fontScale)/100||1))));document.documentElement.style.setProperty('--gauge-scale',String(Math.max(.85,Math.min(1.35,Number(prefs.gaugeScale)/100||1))));
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=prefs.theme==='daylight'?'#dbe5ee':prefs.theme==='night'?'#090000':'#020812';
+}
+applyAppearance();
+function fmtDuration(sec){sec=Math.max(0,Math.round(Number(sec)||0));const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`}
+function fmtEta(sec){sec=Math.max(0,Number(sec)||0);const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);return h?`${h}h ${m}m`:`${m}m`}
+function closeMobileMore(){const s=$('mobileMoreSheet');if(!s)return;s.classList.remove('open');s.setAttribute('aria-hidden','true')}
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===`page-${name}`));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));localStorage.setItem('kawPage',name);closeMobileMore();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.page));const requestedPage=new URLSearchParams(location.search).get('page');showPage(requestedPage||localStorage.getItem('kawPage')||'drive');
+$('mobileMoreBtn').onclick=()=>{$('mobileMoreSheet').classList.add('open');$('mobileMoreSheet').setAttribute('aria-hidden','false')};$('mobileMoreClose').onclick=closeMobileMore;$('mobileMoreSheet').onclick=e=>{if(e.target===$('mobileMoreSheet'))closeMobileMore()};
+const deviceMode=new URLSearchParams(location.search).get('mode');if(deviceMode==='hud'){document.body.classList.add('hud-mode');showPage('drive')}else if(deviceMode==='second-screen'){document.body.classList.add('nav-screen');showPage('navigation')}
+const popoutWidget=new URLSearchParams(location.search).get('widget');if(popoutWidget)document.body.classList.add('widget-mode');document.querySelectorAll('[data-popout]').forEach(b=>b.onclick=()=>window.open(`/?widget=${encodeURIComponent(b.dataset.popout)}`,`kaw-${b.dataset.popout}`,'width=720,height=480'));
+
+function toast(title,sub='',type=''){
+  const el=document.createElement('div');el.className=`toast ${type}`;el.innerHTML=`<div class="tt">${title}</div><div class="ts">${sub}</div>`;$('toasts').appendChild(el);setTimeout(()=>el.remove(),5500)
+}
+function flash(type='green'){if(!prefs.flash)return;document.body.classList.remove('flash-green','flash-orange','flash-red');void document.body.offsetWidth;document.body.classList.add(`flash-${type}`);setTimeout(()=>document.body.classList.remove(`flash-${type}`),950)}
+function sound(kind='join'){
+  if(!prefs.sound)return;
+  try{
+    audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const now=audioCtx.currentTime;
+    const notes=kind==='join'?[523,659,784]:kind==='leave'?[659,523]:kind==='critical'?[220,220,220]:[440];
+    notes.forEach((freq,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=freq;o.type='sine';g.gain.setValueAtTime(.0001,now+i*.12);g.gain.exponentialRampToValueAtTime(.12,now+i*.12+.02);g.gain.exponentialRampToValueAtTime(.0001,now+i*.12+.11);o.connect(g);g.connect(audioCtx.destination);o.start(now+i*.12);o.stop(now+i*.12+.13)})
+  }catch{}
+}
+function convoyAlert(kind,name,detail){
+  const type=kind==='join'?'join':kind==='leave'?'leave':'critical';
+  toast(kind==='join'?`${name} joined the convoy`:kind==='leave'?`${name} left the convoy`:name,detail,type);
+  sound(kind);flash(kind==='join'?'green':kind==='leave'?'orange':'red');
+}
+
+function damageColor(v){v=Number(v)||0;if(v<5)return'var(--green)';if(v<15)return'var(--yellow)';if(v<35)return'var(--orange)';return'var(--red)'}
+function renderDamage(d){
+  const vals=[['Engine',d?.enginePercent],['Transmission',d?.transmissionPercent],['Cabin',d?.cabinPercent],['Chassis',d?.chassisPercent],['Wheels',d?.wheelsPercent],['Cargo',d?.cargoPercent],['Trailer Body',d?.trailerBodyPercent],['Trailer Wheels',d?.trailerWheelsPercent]];
+  $('damageRows').innerHTML=vals.map(([k,v])=>{const n=Math.max(0,Math.min(100,Number(v)||0));return`<div class="health-row"><div>${k}</div><div class="health-track"><div class="health-fill" style="width:${n}%;background:${damageColor(n)}"></div></div><div class="health-pct">${n.toFixed(1)}%</div></div>`}).join('');
+  const max=Math.max(...vals.map(x=>Number(x[1])||0));$('healthOverall').textContent=max<5?'HEALTHY':max<15?'MINOR WEAR':max<35?'SERVICE SOON':'CRITICAL';$('healthOverall').style.color=damageColor(max)
+}
+const sysDefs=[['parking','Parking','Ⓟ','var(--red)',''],['lowBeam','Low Beam','◖≡','var(--green)',''],['highBeam','High Beam','◖═','var(--blue)',''],['leftBlinkerOn','Left Signal','◀','var(--green)','signal'],['rightBlinkerOn','Right Signal','▶','var(--green)','signal'],['hazards','Hazards','◀ ▶','var(--orange)','hazard'],['beacon','Beacon','♨','var(--orange)',''],['brake','Brake Lights','● ●','var(--red)',''],['reverse','Reverse','R','var(--text)',''],['wipers','Wipers','⌁','var(--blue)',''],['cruiseControl','Cruise','◴','var(--green)',''],['differentialLock','Diff Lock','⊗','var(--orange)','']];
+function systemState(s,key){if(['parking','lowBeam','highBeam','leftBlinkerOn','rightBlinkerOn','hazards','beacon','brake','reverse'].includes(key))return!!s?.lights?.[key];return!!s?.[key]}
+function systemsHtml(s,limit=null){return sysDefs.slice(0,limit||sysDefs.length).map(([k,n,icon,color,kind])=>{const on=systemState(s,k);return`<div class="system-chip ${on?'on':''} ${kind||''}" style="--indicator-color:${color}"><div class="sys-icon" aria-hidden="true">${icon}</div><div class="name">${n}</div><div class="state">${on?'ON':'OFF'}</div></div>`}).join('')}
+function renderInstruments(i,w,t){
+  const list=[['Air Pressure',finite(i?.airPressurePsi)?`${f0(i.airPressurePsi)} PSI`:'—'],['Oil Pressure',finite(i?.oilPressurePsi)?`${f0(i.oilPressurePsi)} PSI`:'—'],['Oil Temp',finite(i?.oilTemperatureC)?`${f0(i.oilTemperatureC)} °C`:'—'],['Coolant',finite(i?.waterTemperatureC)?`${f0(i.waterTemperatureC)} °C`:'—'],['Battery',finite(i?.batteryVoltage)?`${Number(i.batteryVoltage).toFixed(1)} V`:'—'],['AdBlue / DEF',finite(i?.adblueLiters)?`${f1(i.adblueLiters)} L`:'—'],['Throttle',`${f0(i?.throttle||0)}%`],['Brake',`${f0(i?.brake||0)}%`]];
+  $('instrumentGrid').innerHTML=list.map(([k,v])=>`<div class="instrument"><div class="ik">${k}</div><div class="iv">${v}</div></div>`).join('');$('instrumentGear').textContent=`GEAR ${t?.displayedGear??t?.gear??'—'}`;
+  const wc=Object.values(w||{}).filter(Boolean).length;$('warningCount').textContent=`${wc} warning${wc===1?'':'s'}`;$('quickWarnings').textContent=`${wc} warning${wc===1?'':'s'}`
+}
+function relationClass(r){return r==='YOUR ROUTE'?'blue':r==='SAME ROUTE'?'good':r==='SAME DESTINATION'?'warn':'muted'}
+function renderConvoy(c){
+  const roster=Array.isArray(c?.roster)?c.roster:[];$('convoySummary').innerHTML=`<span><b>${roster.length}</b> drivers</span><span><b>${roster.filter(x=>x.online).length}</b> online</span><span><b>${roster.filter(x=>x.relation==='SAME ROUTE').length}</b> same route</span>`;
+  const current=new Map(roster.filter(x=>!x.isLocal).map(x=>[x.id,{online:x.online,relation:x.relation,driverName:x.driverName}]));
+  if(lastRoster.size){for(const [id,p] of current){if(p.online&&!lastRoster.get(id)?.online)convoyAlert('join',p.driverName,p.relation);else if(p.online&&lastRoster.get(id)?.relation&&p.relation!==lastRoster.get(id).relation){toast(`${p.driverName} route changed`,`${lastRoster.get(id).relation} → ${p.relation}`,'');flash('orange')}}for(const [id,p] of lastRoster){if(p.online&&!current.get(id)?.online)convoyAlert('leave',p.driverName,'Driver went offline')}}
+  lastRoster=current;
+  $('convoyRows').innerHTML=roster.map(p=>{const route=(p.job?.originCity&&p.job?.destinationCity)?`${p.job.originCity} → ${p.job.destinationCity}`:'—';const truck=[p.truck?.make,p.truck?.model].filter(Boolean).join(' ')||'—';return`<tr><td><b>${p.driverName||'Driver'}${p.isLocal?' (YOU)':''}</b></td><td>${p.companionVersion||'local'}</td><td class="${p.online?'good':'muted'}">${p.online?'ONLINE':'OFFLINE'}</td><td>${truck}</td><td>${f1(p.truck?.speedMph||0)} MPH</td><td>${p.job?.cargo||'—'}</td><td>${route}</td><td>${p.navigation?.distanceMiles==null?'—':`${f1(p.navigation.distanceMiles)} mi`}</td><td class="${relationClass(p.relation)}"><b>${p.relation||'—'}</b></td></tr>`}).join('');
+  const cmds=Array.isArray(c?.commands)?c.commands:[];$('commandFeed').innerHTML=cmds.length?cmds.map(x=>`<div style="padding:7px 0;border-bottom:1px solid #163149"><b class="${x.type==='EMERGENCY STOP'?'bad':'blue'}">${x.type}</b> <span class="muted">• ${new Date(x.createdAt).toLocaleTimeString()} • ${x.issuedBy}</span>${x.message?`<div>${x.message}</div>`:''}</div>`).join(''):'<span class="muted">No convoy commands yet.</span>';
+  if(cmds[0]?.id&&lastCommandId&&cmds[0].id!==lastCommandId){const c0=cmds[0];convoyAlert(c0.type==='EMERGENCY STOP'?'critical':'join',`CONVOY COMMAND: ${c0.type}`,c0.message||`Issued by ${c0.issuedBy}`)}if(cmds[0]?.id)lastCommandId=cmds[0].id
+}
+const radarHistory=new Map(),radarAlertTimes=new Map();let radarAlertList=[],voiceRecognition=null,wakeRestart=false,lastGamepadPressed=false;
+function radarInfo(peer,local){const a=local?.positioning||{},b=peer?.positioning||{};const valid=finite(a.x)&&finite(a.z)&&finite(b.x)&&finite(b.z);if(!valid)return{valid:false,distance:null,direction:'LOCATION PRIVATE'};const dx=Number(b.x)-Number(a.x);const dz=Number(b.z)-Number(a.z);const distance=Math.hypot(dx,dz)/1609.344;const heading=finite(a.rotationX)?Number(a.rotationX)*Math.PI*2:0;const forwardX=Math.sin(heading),forwardZ=-Math.cos(heading);const forwardDistance=dx*forwardX+dz*forwardZ;const sideDistance=dx*Math.cos(heading)+dz*Math.sin(heading);const direction=Math.abs(forwardDistance)>=Math.abs(sideDistance)?(forwardDistance>=0?'AHEAD':'BEHIND'):(sideDistance>=0?'RIGHT':'LEFT');return{valid:true,dx,dz,distance,direction}}
+function speakText(text){if(window.KAW16?.coDriverSpeech)return window.KAW16.coDriverSpeech(text);if(latestTelemetry?.voicePromptSource==='game')return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=1.04;speechSynthesis.speak(u)}catch{}}
+function addRadarAlert(key,text,severity='warn'){const now=Date.now();if(now-(radarAlertTimes.get(key)||0)<60000)return;radarAlertTimes.set(key,now);radarAlertList.unshift({text,severity,at:now});radarAlertList=radarAlertList.slice(0,8);$('radarAlerts').innerHTML=radarAlertList.map(x=>`<div class="radar-alert" style="border-left-color:${x.severity==='bad'?'var(--red)':'var(--yellow)'}">${safeHtml(x.text)} <span class="muted">${new Date(x.at).toLocaleTimeString()}</span></div>`).join('');if(prefs.radarSpeak)speakText(text)}
+function renderRadar(d){const roster=(d?.convoy?.roster||[]).filter(x=>x.online),local=roster.find(x=>x.isLocal)||{positioning:d.positioning,truck:d.truck,driverName:'YOU',isLocal:true,online:true},peers=roster.filter(x=>!x.isLocal),range=Number(prefs.radarRange)||10,c=$('radarCanvas');if(!c)return;const ctx=c.getContext('2d'),w=c.width,h=c.height,cx=w/2,cy=h/2,scale=(w*.43)/(range*1609.344);ctx.clearRect(0,0,w,h);ctx.strokeStyle='#174b70';ctx.lineWidth=2;[.25,.5,.75,1].forEach(q=>{ctx.beginPath();ctx.arc(cx,cy,w*.43*q,0,Math.PI*2);ctx.stroke()});ctx.fillStyle='#6f8ca4';ctx.font='16px Segoe UI';ctx.fillText(`${range} mi`,cx+8,28);const rot=prefs.radarOrientation==='heading'&&finite(local.positioning?.rotationX)?-Number(local.positioning.rotationX)*Math.PI*2:0;ctx.save();ctx.translate(cx,cy);ctx.rotate(rot);peers.forEach(p=>{const i=radarInfo(p,local);if(!i.valid||i.distance>range)return;const x=i.dx*scale,y=-i.dz*scale;ctx.fillStyle=(Number(p.truck?.speedMph)||0)<1?'#ffca3a':'#53ed63';ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fill();ctx.save();ctx.rotate(-rot);ctx.fillStyle='#fff';ctx.font='bold 17px Segoe UI';ctx.fillText(String(p.driverName||'Driver').slice(0,18),x+14,y+5);ctx.restore()});ctx.restore();ctx.fillStyle='#2a8fff';ctx.beginPath();ctx.moveTo(cx,cy-16);ctx.lineTo(cx-11,cy+13);ctx.lineTo(cx+11,cy+13);ctx.closePath();ctx.fill();$('radarOnline').textContent=`${roster.length} ONLINE`;
+ const rows=peers.map(p=>{const i=radarInfo(p,local),speed=Number(p.truck?.speedMph),status=!finite(speed)?'SPEED PRIVATE':speed<1?'STOPPED':`${f1(speed)} MPH`,where=i.valid?`${i.direction} • ${i.distance.toFixed(1)} mi`:i.direction,old=radarHistory.get(p.id)||{};if(i.valid&&i.distance>Number(prefs.separationMiles))addRadarAlert(`sep-${p.id}`,`${p.driverName} is ${i.distance.toFixed(1)} miles ${i.direction.toLowerCase()}.`);if(finite(speed)&&speed<1&&old.stoppedAt&&Date.now()-old.stoppedAt>45000)addRadarAlert(`stop-${p.id}`,`${p.driverName} has been stopped for about a minute.`);const stoppedAt=finite(speed)&&speed<1?(old.stoppedAt||Date.now()):null;radarHistory.set(p.id,{distance:i.distance,speed,stoppedAt});return`<div class="radar-driver"><div><b>${safeHtml(p.driverName||'Driver')}</b><div class="muted">${safeHtml(status)}</div></div><div class="where">${safeHtml(where)}</div></div>`});$('radarRoster').innerHTML=rows.length?rows.join(''):'<div class="placeholder">No other paired drivers are online.</div>'}
+function answerVoice(raw){const text=String(raw||'').trim(),q=text.toLowerCase().replace(/^hey\s+kaw[, ]*/,'');if(!q)return;const d=latestTelemetry||{},roster=(d.convoy?.roster||[]),local=roster.find(x=>x.isLocal)||{positioning:d.positioning,truck:d.truck};let answer='I did not understand that. Try asking where a driver is, who is behind, whether everyone is moving, fuel, damage, or regroup.';if(q.startsWith('where is ')){const wanted=q.slice(9).trim(),p=roster.filter(x=>!x.isLocal).sort((a,b)=>String(a.driverName).toLowerCase().includes(wanted)?-1:String(b.driverName).toLowerCase().includes(wanted)?1:0)[0];if(p){const i=radarInfo(p,local);answer=i.valid?`${p.driverName} is ${i.distance.toFixed(1)} miles ${i.direction.toLowerCase()}, traveling ${f0(p.truck?.speedMph||0)} miles per hour.`:`${p.driverName} is online, but location sharing is unavailable.`}else answer=`I cannot find ${wanted} in the paired convoy.`}else if(q.includes('who is behind')||q.includes('who is ahead')){const dir=q.includes('behind')?'BEHIND':'AHEAD',list=roster.filter(x=>!x.isLocal).map(p=>({p,i:radarInfo(p,local)})).filter(x=>x.i.direction===dir).sort((a,b)=>a.i.distance-b.i.distance);answer=list.length?`${list.map(x=>`${x.p.driverName}, ${x.i.distance.toFixed(1)} miles`).join('; ')} ${dir.toLowerCase()}.`:`No paired drivers are showing ${dir.toLowerCase()}.`}else if(q.includes('everybody moving')||q.includes('who stopped')){const stopped=roster.filter(x=>!x.isLocal&&finite(x.truck?.speedMph)&&Number(x.truck.speedMph)<1);answer=stopped.length?`${stopped.map(x=>x.driverName).join(', ')} ${stopped.length===1?'is':'are'} stopped.`:'Every paired driver with shared speed is moving.'}else if(q.includes('fuel'))answer=`You have ${f1(d.truck?.fuelGallons||0)} gallons, with an estimated range of ${f0(d.truck?.fuelRangeMiles||0)} miles.`;else if(q.includes('damage')||q.includes('truck health')){const max=Math.max(...Object.values(d.damage||{}).map(Number).filter(Number.isFinite),0);answer=`Your highest reported damage is ${max.toFixed(1)} percent.`}else if(q.includes('regroup')){sendCommand('REGROUP');answer='Regroup command sent to the convoy.'}else if(q.includes('pulling over')||q.includes('hold position')){sendCommand('HOLD POSITION');answer='Hold position command sent.'}else if(q.includes('open cb')||q.includes('open radio')){showPage('radio');answer='Opening Companion CB.'}$('voiceAnswer').textContent=`You: ${text}\n\nKAW: ${answer}`;if(prefs.voiceReplies)speakText(answer)}
+function beginVoice(){if(!voiceRecognition){toast('Speech recognition unavailable','Use the text command box, or Chrome / Edge.','critical');return}try{voiceRecognition.start()}catch{}}
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(SpeechRecognition){voiceRecognition=new SpeechRecognition();voiceRecognition.lang='en-US';voiceRecognition.interimResults=false;voiceRecognition.continuous=false;$('voiceSupport').textContent='VOICE READY';$('voiceSupport').className='good';voiceRecognition.onstart=()=>{$('voiceAsk').classList.add('listening');$('voiceAsk').textContent='LISTENING…'};voiceRecognition.onend=()=>{$('voiceAsk').classList.remove('listening');$('voiceAsk').textContent='🎙 PRESS TO ASK';if(wakeRestart&&prefs.voiceMode==='wake')setTimeout(beginVoice,400)};voiceRecognition.onresult=e=>{const t=e.results[e.results.length-1][0].transcript;if(prefs.voiceMode!=='wake'||/hey\s+kaw/i.test(t))answerVoice(t)};voiceRecognition.onerror=e=>{if(e.error!=='no-speech')$('voiceAnswer').textContent=`Microphone: ${e.error}`}}else{$('voiceSupport').textContent='TEXT MODE';$('voiceSupport').className='warn'}
+$('voiceAsk').onclick=()=>beginVoice();$('voiceTextSend').onclick=()=>answerVoice($('voiceText').value);$('voiceText').onkeydown=e=>{if(e.key==='Enter')answerVoice(e.target.value)};
+$('radarRange').value=prefs.radarRange;$('separationMiles').value=prefs.separationMiles;$('radarOrientation').value=prefs.radarOrientation;$('voiceMode').value=prefs.voiceMode;$('voiceHotkey').value=prefs.voiceHotkey;$('voiceGamepad').value=prefs.voiceGamepad;$('voiceReplies').value=prefs.voiceReplies?'on':'off';$('radarSpeakToggle').textContent=`Spoken alerts: ${prefs.radarSpeak?'ON':'OFF'}`;
+['radarRange','separationMiles','radarOrientation'].forEach(id=>$(id).onchange=e=>{prefs[id]=id==='radarOrientation'?e.target.value:Number(e.target.value);savePrefs()});$('radarSpeakToggle').onclick=()=>{prefs.radarSpeak=!prefs.radarSpeak;savePrefs();$('radarSpeakToggle').textContent=`Spoken alerts: ${prefs.radarSpeak?'ON':'OFF'}`};$('voiceMode').onchange=e=>{prefs.voiceMode=e.target.value;wakeRestart=prefs.voiceMode==='wake';savePrefs();if(wakeRestart)beginVoice();else try{voiceRecognition?.stop()}catch{}};$('voiceHotkey').onchange=e=>{prefs.voiceHotkey=(e.target.value||'V').slice(0,1).toUpperCase();e.target.value=prefs.voiceHotkey;savePrefs()};$('voiceGamepad').onchange=e=>{prefs.voiceGamepad=Number(e.target.value)||0;savePrefs()};$('voiceReplies').onchange=e=>{prefs.voiceReplies=e.target.value==='on';savePrefs()};$('clearRadarAlerts').onclick=()=>{radarAlertList=[];$('radarAlerts').innerHTML='<span class="muted">No active alerts.</span>'};document.addEventListener('keydown',e=>{if(!e.repeat&&e.key.toUpperCase()===prefs.voiceHotkey&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName))beginVoice()});setInterval(()=>{const gp=navigator.getGamepads?.()[0],pressed=!!gp?.buttons?.[Number(prefs.voiceGamepad)]?.pressed;if(pressed&&!lastGamepadPressed)beginVoice();lastGamepadPressed=pressed},100);
+let navLastMilestone=null,navLastOverspeed=0,navLastCritical={};
+function compassHeading(rotation){if(!finite(rotation))return'—';const deg=(((1-Number(rotation))*360)%360+360)%360,names=['N','NE','E','SE','S','SW','W','NW'];return`${names[Math.round(deg/45)%8]} • ${Math.round(deg)}°`}
+function routeUpdateText(d){const n=d?.navigation||{},t=d?.truck||{},j=d?.job||{},parts=[];if(j.destinationCity)parts.push(`Destination ${j.destinationCity}`);if(finite(n.distanceMiles))parts.push(`${f1(n.distanceMiles)} miles remaining`);if(finite(n.etaSeconds))parts.push(`estimated travel time ${fmtEta(n.etaSeconds)}`);if(finite(t.fuelRangeMiles))parts.push(`fuel range ${f0(t.fuelRangeMiles)} miles`);return parts.length?parts.join(', ')+'.':'No active navigation route is available.'}
+function renderNavCopilot(d){const n=d?.navigation||{},t=d?.truck||{},roster=(d?.convoy?.roster||[]),local=roster.find(x=>x.isLocal)||{positioning:d.positioning},near=roster.filter(x=>!x.isLocal&&x.online).map(p=>({p,i:radarInfo(p,local)})).filter(x=>x.i.valid).sort((a,b)=>a.i.distance-b.i.distance)[0];$('navHeading').textContent=compassHeading(d?.positioning?.rotationX);$('navNearest').textContent=near?`${near.p.driverName} • ${near.i.distance.toFixed(1)} mi`:'—';$('navArrival').textContent=finite(n.etaSeconds)?new Date(Date.now()+Number(n.etaSeconds)*1000).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'—';$('navVoiceStatus').textContent=prefs.navVoice?'READY':'MUTED';$('navVoiceStatus').className=prefs.navVoice?'v good':'v muted';if(window.KAW16?.coDriverSpeech){$('navVoiceStatus').textContent=d?.voicePromptSource==='game'?'ATS VOICE':'CO-DRIVER';return;}if(!prefs.navVoice||!d?.connected||d.sdk?.paused||document.readyState!=='complete')return;const dist=Number(n.distanceMiles),marks=prefs.navVoiceFrequency==='frequent'?[100,50,25,10,5,2,1,.5]:[50,25,10,5,2,1,.5],mark=marks.find(x=>dist<=x&&dist>x*.55);if(finite(dist)&&mark!==undefined&&mark!==navLastMilestone&&prefs.navVoiceFrequency!=='critical'){navLastMilestone=mark;speakText(routeUpdateText(d))}const over=Number(t.speedMph)-Number(n.speedLimitMph),limit=Number(prefs.navOverspeed);if(limit&&finite(n.speedLimitMph)&&over>=limit&&Date.now()-navLastOverspeed>45000){navLastOverspeed=Date.now();speakText(`Speed warning. You are ${Math.round(over)} miles per hour over the limit.`)}if(finite(t.fuelRangeMiles)&&Number(t.fuelRangeMiles)>=0&&t.fuelRangeMiles<30&&!navLastCritical.fuel){navLastCritical.fuel=true;speakText('Fuel warning. Your estimated fuel range is under 30 miles.')}if(d?.connected&&finite(n.restStopMinutes)&&Number(n.restStopMinutes)>0&&n.restStopMinutes<30&&!navLastCritical.rest){navLastCritical.rest=true;speakText('Rest warning. Plan a safe rest stop soon.')}const max=Math.max(...Object.values(d?.damage||{}).map(Number).filter(Number.isFinite),0);if(max>=25&&!navLastCritical.damage){navLastCritical.damage=true;speakText('Vehicle damage warning. A repair stop is recommended.')}}
+$('navVoiceToggle').textContent=`Voice guidance: ${prefs.navVoice?'ON':'OFF'}`;$('navVoiceFrequency').value=prefs.navVoiceFrequency;$('navOverspeed').value=String(prefs.navOverspeed);$('navMapStyle').value=prefs.navMapStyle;$('navMapFrame').value=prefs.navMapFrame;$('navRefreshRate').value=String(prefs.navRefreshRate);$('navVoiceToggle').onclick=()=>{prefs.navVoice=!prefs.navVoice;savePrefs();$('navVoiceToggle').textContent=`Voice guidance: ${prefs.navVoice?'ON':'OFF'}`};$('navVoiceFrequency').onchange=e=>{prefs.navVoiceFrequency=e.target.value;savePrefs()};$('navOverspeed').onchange=e=>{prefs.navOverspeed=Number(e.target.value);savePrefs()};$('navMapStyle').onchange=e=>{prefs.navMapStyle=e.target.value;savePrefs();drawRouteTrace(latestTelemetry?.positioning||{},latestTelemetry)};$('navMapFrame').onchange=e=>{prefs.navMapFrame=e.target.value;savePrefs();drawRouteTrace(latestTelemetry?.positioning||{},latestTelemetry)};$('navRefreshRate').onchange=e=>{prefs.navRefreshRate=Math.max(1,Math.min(10,Number(e.target.value)||5));savePrefs();restartTelemetryLoop();drawRouteTrace(latestTelemetry?.positioning||{},latestTelemetry)};$('navSpeakNow').onclick=()=>speakText(routeUpdateText(latestTelemetry||{}));$('navFullscreen').onclick=()=>window.open('/?page=navigation&mode=second-screen','kaw-navigation','width=1200,height=850');
+let suggestions=JSON.parse(localStorage.getItem('kawSuggestions')||'[]');function suggestionText(){const title=$('suggestTitle').value.trim(),body=$('suggestBody').value.trim();return `KAW COMPANION SUGGESTION\nCategory: ${$('suggestCategory').value}\nTitle: ${title||'Untitled'}\n\n${body||'No description'}${$('suggestDiagnostics').checked?`\n\n${diagnosticText()}`:''}`}
+function renderSuggestions(){$('suggestList').innerHTML=suggestions.length?suggestions.map((x,i)=>`<div class="suggest-card"><h3>${safeHtml(x.title)}</h3><div class="blue">${safeHtml(x.category)}</div><p>${safeHtml(x.body)}</p><div class="muted">Saved ${new Date(x.createdAt).toLocaleString()}</div><div class="suggest-actions"><button class="cmd" data-suggest-copy="${i}">Copy</button><button class="cmd emergency" data-suggest-delete="${i}">Delete</button></div></div>`).join(''):'<div class="placeholder">No saved suggestions yet.</div>';document.querySelectorAll('[data-suggest-copy]').forEach(b=>b.onclick=()=>{const x=suggestions[Number(b.dataset.suggestCopy)];navigator.clipboard?.writeText(`KAW COMPANION SUGGESTION\nCategory: ${x.category}\nTitle: ${x.title}\n\n${x.body}`);toast('Suggestion copied','Ready to paste into Discord','good')});document.querySelectorAll('[data-suggest-delete]').forEach(b=>b.onclick=()=>{suggestions.splice(Number(b.dataset.suggestDelete),1);localStorage.setItem('kawSuggestions',JSON.stringify(suggestions));renderSuggestions()})}
+$('suggestSave').onclick=()=>{const title=$('suggestTitle').value.trim(),body=$('suggestBody').value.trim();if(!title||!body){toast('Add a title and description','Both fields are required.','critical');return}suggestions.unshift({title,body,category:$('suggestCategory').value,createdAt:new Date().toISOString()});localStorage.setItem('kawSuggestions',JSON.stringify(suggestions));$('suggestTitle').value='';$('suggestBody').value='';renderSuggestions();toast('Suggestion saved','Stored privately on this device.','good')};$('suggestCopy').onclick=async()=>{const t=suggestionText();try{await navigator.clipboard.writeText(t);toast('Suggestion copied','Ready to paste into Discord','good')}catch{prompt('Copy suggestion:',t)}};$('suggestExport').onclick=()=>{const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify({format:'KAW-Suggestions',version:1,suggestions},null,2)],{type:'application/json'}));a.href=url;a.download='KAW-Companion-Suggestions.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};renderSuggestions();
+async function sendCommand(type){try{const r=await fetch('/api/convoy/command',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type,issuedBy:'Kaw'})});const j=await r.json();if(j.ok){toast(`Command sent: ${type}`,'Convoy command foundation','');sound(type==='EMERGENCY STOP'?'critical':'join');flash(type==='EMERGENCY STOP'?'red':'green')}}catch{}}
+document.querySelectorAll('[data-command]').forEach(b=>b.onclick=()=>sendCommand(b.dataset.command));
+
+function thresholds(){
+  if(prefs.coachMode==='economy')return{up:1450,down:1000};
+  if(prefs.coachMode==='performance')return{up:1850,down:1200};
+  if(prefs.transmission==='custom')return{up:Number(prefs.customUp)||1600,down:Number(prefs.customDown)||1100};
+  return{up:1600,down:1100}
+}
+function renderCoach(t){
+  const rpm=Number(t?.rpm)||0,gear=Number(t?.displayedGear??t?.gear),speed=Number(t?.speedMph)||0,{up,down}=thresholds();let action='HOLD',detail=`Target ${down}–${up} RPM`;
+  if(prefs.transmission==='auto'){action='AUTOMATIC';detail='ATS/vehicle controls shift timing';}
+  else if(rpm>up&&speed>3){action='UPSHIFT';detail=`RPM ${Math.round(rpm)} is above ${up}`;}
+  else if(rpm<down&&speed>5&&gear>1){action='DOWNSHIFT';detail=`RPM ${Math.round(rpm)} is below ${down}`;}
+  else if(rpm<700&&speed<2){action='IDLE';detail='Truck is stationary / idling';}
+  $('coachAction').textContent=action;$('coachAction').style.color=action==='UPSHIFT'?'var(--green)':action==='DOWNSHIFT'?'var(--yellow)':action==='AUTOMATIC'?'var(--blue)':'#fff';$('coachDetail').textContent=detail;$('coachGear').textContent=Number.isFinite(gear)?gear:'—';$('coachBand').textContent=`${down}–${up}`;
+  if(prefs.transmission==='13'||prefs.transmission==='18'){const max=Number(prefs.transmission),half=Math.ceil(max/2);$('coachRange').textContent=gear>half?'HIGH':'LOW';$('coachSplit').textContent=Number.isFinite(gear)?(Math.abs(gear)%2?'LOW':'HIGH'):'—'}else{$('coachRange').textContent=prefs.transmission==='10'?(gear>5?'HIGH':'LOW'):'AUTO';$('coachSplit').textContent=prefs.transmission==='10'?'N/A':'AUTO'}
+}
+function renderStats(s,t){$('statTrips').textContent=s?.totalTrips||0;$('statDelivered').textContent=s?.deliveredTrips||0;$('statMiles').textContent=f1(s?.totalMiles||0);$('statIncome').textContent=money(s?.totalIncome||0);$('statFuel').textContent=`${f1(s?.totalFuelUsedGallons||0)} gal`;$('statSpeeding').textContent=fmtDuration(s?.totalSpeedingSeconds||0);$('statOdo').textContent=`${f1(t?.odometerMiles||0)} mi`;$('statRange').textContent=finite(t?.fuelRangeMiles)?`${f1(t.fuelRangeMiles)} mi`:'—'}
+async function refreshTrips(){try{const r=await fetch('/api/trips?limit=30',{cache:'no-store'}),trips=await r.json();$('tripRows').innerHTML=trips.length?trips.map(t=>`<tr><td class="${t.status==='delivered'?'good':t.status==='cancelled'?'bad':'warn'}">${String(t.status||'').toUpperCase()}</td><td>${t.cargo||'—'}</td><td>${[t.originCity,t.destinationCity].filter(Boolean).join(' → ')||'—'}</td><td>${f1(t.milesDriven||0)}</td><td>${money(t.deliveredIncome||0)}</td><td>${f1(t.fuelUsedGallons||0)} gal</td><td>${t.endedAt?new Date(t.endedAt).toLocaleString():'—'}</td></tr>`).join(''):'<tr><td colspan="7" class="muted">No trips recorded.</td></tr>'}catch{}}
+setInterval(refreshTrips,5000);refreshTrips();
+
+$('soundToggle').classList.toggle('on',prefs.sound);$('flashToggle').classList.toggle('on',prefs.flash);$('motionToggle').classList.toggle('on',prefs.reducedMotion);$('transmissionProfile').value=prefs.transmission;$('coachMode').value=prefs.coachMode;$('customUp').value=prefs.customUp;$('customDown').value=prefs.customDown;$('themeSelect').value=prefs.theme;$('gaugeStyle').value=prefs.gaugeStyle;$('fontScale').value=prefs.fontScale;$('fontScaleValue').textContent=`${prefs.fontScale}%`;$('gaugeScale').value=prefs.gaugeScale;$('gaugeScaleValue').textContent=`${prefs.gaugeScale}%`;$('densitySelect').value=prefs.density;$('deviceProfile').value=prefs.deviceProfile;
+$('soundToggle').onclick=()=>{prefs.sound=!prefs.sound;$('soundToggle').classList.toggle('on',prefs.sound);savePrefs();if(prefs.sound)sound('join')};$('flashToggle').onclick=()=>{prefs.flash=!prefs.flash;$('flashToggle').classList.toggle('on',prefs.flash);savePrefs();if(prefs.flash)flash('green')};$('testSound').onclick=()=>convoyAlert('join','TEST DRIVER','joined • SAME ROUTE');
+$('transmissionProfile').onchange=e=>{prefs.transmission=e.target.value;savePrefs()};$('coachMode').onchange=e=>{prefs.coachMode=e.target.value;savePrefs()};$('customUp').onchange=e=>{prefs.customUp=Number(e.target.value);savePrefs()};$('customDown').onchange=e=>{prefs.customDown=Number(e.target.value);savePrefs()};
+$('themeSelect').onchange=e=>{prefs.theme=e.target.value;savePrefs();applyAppearance();toast('Cab skin changed',e.target.options[e.target.selectedIndex].text,'join')};$('gaugeStyle').onchange=e=>{prefs.gaugeStyle=e.target.value;savePrefs();applyAppearance()};$('fontScale').oninput=e=>{prefs.fontScale=Number(e.target.value);$('fontScaleValue').textContent=`${prefs.fontScale}%`;savePrefs();applyAppearance()};$('gaugeScale').oninput=e=>{prefs.gaugeScale=Number(e.target.value);$('gaugeScaleValue').textContent=`${prefs.gaugeScale}%`;savePrefs();applyAppearance()};$('densitySelect').onchange=e=>{prefs.density=e.target.value;savePrefs();applyAppearance()};$('motionToggle').onclick=()=>{prefs.reducedMotion=!prefs.reducedMotion;$('motionToggle').classList.toggle('on',prefs.reducedMotion);savePrefs();applyAppearance()};
+$('applyDeviceProfile').onclick=()=>{const profile=$('deviceProfile').value,profiles={auto:{fontScale:100,gaugeScale:100,density:'standard'},phone:{fontScale:105,gaugeScale:95,density:'compact'},tablet:{fontScale:115,gaugeScale:110,density:'touch'},monitor:{fontScale:120,gaugeScale:115,density:'standard'},streamdeck:{fontScale:125,gaugeScale:125,density:'compact'}};Object.assign(prefs,profiles[profile]||profiles.auto,{deviceProfile:profile});savePrefs();$('fontScale').value=prefs.fontScale;$('fontScaleValue').textContent=`${prefs.fontScale}%`;$('gaugeScale').value=prefs.gaugeScale;$('gaugeScaleValue').textContent=`${prefs.gaugeScale}%`;$('densitySelect').value=prefs.density;applyAppearance();toast('Device profile applied',$('deviceProfile').options[$('deviceProfile').selectedIndex].text,'join')};
+
+
+// ---------------- Dashboard Studio v0.5 ----------------
+const widgetCatalog={
+ speed:{title:'Speed',desc:'Live MPH',w:3,h:2},
+ rpm:{title:'RPM',desc:'Engine RPM',w:3,h:2},
+ fuel:{title:'Fuel',desc:'Fuel gallons & percent',w:3,h:2},
+ gear:{title:'Gear',desc:'Current gear',w:2,h:2},
+ truck:{title:'Truck',desc:'Make / model',w:4,h:2},
+ cargo:{title:'Cargo',desc:'Current cargo',w:4,h:2},
+ route:{title:'Route',desc:'Origin → destination',w:5,h:2},
+ nav:{title:'Navigation',desc:'Remaining / ETA / speed limit',w:5,h:2},
+ health:{title:'Truck Health',desc:'Damage summary',w:4,h:3},
+ lights:{title:'Lights & Systems',desc:'Live light/system states',w:5,h:3},
+ shift:{title:'Shift Coach',desc:'Gear recommendation',w:4,h:3},
+ trip:{title:'Active Trip',desc:'Trip logger summary',w:5,h:3},
+ convoy:{title:'Convoy Roster',desc:'Drivers & route relation',w:6,h:4},
+ stats:{title:'Driver Stats',desc:'Trip/miles/income',w:4,h:3},
+ income:{title:'Job Income',desc:'Current job value',w:3,h:2},
+ odometer:{title:'Odometer',desc:'Truck mileage',w:3,h:2},
+ warnings:{title:'Warnings',desc:'Truck warnings',w:3,h:2},
+ clock:{title:'Updated',desc:'Last telemetry update',w:3,h:2}
+};
+const presetLayouts={
+ driving:['truck','speed','rpm','fuel','gear','trip','nav','warnings'],
+ convoy:['speed','fuel','nav','convoy','trip','warnings'],
+ navigation:['speed','nav','route','cargo','fuel','clock'],
+ shifting:['speed','rpm','gear','shift','fuel','health'],
+ minimal:['speed','rpm','gear','nav']
+};
+let studioData={};
+function defaultStudio(){
+ return{
+  active:'Driving',
+  layouts:{
+   Driving:{widgets:presetLayouts.driving.map((id,i)=>({id,key:`${id}-${Date.now()}-${i}`,w:widgetCatalog[id].w,h:widgetCatalog[id].h}))}
+  }
+ }
+}
+function loadStudio(){try{studioData=JSON.parse(localStorage.getItem('kawDashboardStudio')||'null')||defaultStudio()}catch{studioData=defaultStudio()}if(!studioData.layouts||!Object.keys(studioData.layouts).length)studioData=defaultStudio()}
+function saveStudio(){localStorage.setItem('kawDashboardStudio',JSON.stringify(studioData))}
+function currentLayoutName(){return $('layoutSelect')?.value||studioData.active||Object.keys(studioData.layouts)[0]}
+function renderLayoutSelect(){
+ const s=$('layoutSelect');if(!s)return;const old=s.value||studioData.active;s.innerHTML=Object.keys(studioData.layouts).map(n=>`<option ${n===old?'selected':''}>${n}</option>`).join('');if(!studioData.layouts[s.value])s.value=Object.keys(studioData.layouts)[0]
+}
+function renderWidgetLibrary(filter=''){
+ const q=filter.toLowerCase();$('widgetLibrary').innerHTML=Object.entries(widgetCatalog).filter(([,v])=>!q||v.title.toLowerCase().includes(q)||v.desc.toLowerCase().includes(q)).map(([id,v])=>`<div class="widget-item" data-widget-add="${id}"><b>${v.title}</b><span>${v.desc}</span></div>`).join('');
+ document.querySelectorAll('[data-widget-add]').forEach(x=>x.onclick=()=>addWidget(x.dataset.widgetAdd))
+}
+function widgetInner(id,d){
+ const t=d?.truck||{},j=d?.job||{},n=d?.navigation||{},trip=d?.trip||null,c=d?.convoy||{},s=d?.tripStats||{};
+ const maps={
+  speed:`<div class="studio-metric">${f1(t.speedMph||0)}</div><div class="studio-sub">MPH</div>`,
+  rpm:`<div class="studio-metric">${f0(t.rpm||0)}</div><div class="studio-sub">RPM</div>`,
+  fuel:`<div class="studio-metric">${f1(t.fuelGallons||0)}</div><div class="studio-sub">${t.fuelCapacityGallons?f0((t.fuelGallons/t.fuelCapacityGallons)*100)+'%':'GAL'}</div>`,
+  gear:`<div class="studio-metric">${t.displayedGear??t.gear??'—'}</div><div class="studio-sub">CURRENT GEAR</div>`,
+  truck:`<div style="font-size:24px;font-weight:1000">${[t.make,t.model].filter(Boolean).join(' ')||'—'}</div><div class="studio-sub">${t.licensePlate||''}</div>`,
+  cargo:`<div style="font-size:20px;font-weight:1000">${j.cargo||'—'}</div><div class="studio-sub">${j.cargoMassKg?f0(j.cargoMassKg)+' kg':''}</div>`,
+  route:`<div style="font-size:20px;font-weight:1000">${j.originCity&&j.destinationCity?`${j.originCity} → ${j.destinationCity}`:'—'}</div><div class="studio-sub">${j.destinationCompany||''}</div>`,
+  nav:`<div style="font-size:25px;font-weight:1000">${f1(n.distanceMiles||0)} mi</div><div class="studio-sub">ETA ${n.etaSeconds!=null?fmtEta(n.etaSeconds):'—'} • LIMIT ${f0(n.speedLimitMph||0)} MPH</div>`,
+  health:`<div style="font-size:22px;font-weight:1000;color:${damageColor(Math.max(...Object.values(d?.damage||{}).map(Number).filter(Number.isFinite),0))}">${Math.max(...Object.values(d?.damage||{}).map(Number).filter(Number.isFinite),0).toFixed(1)}% MAX DAMAGE</div><div class="studio-sub">Engine / transmission / chassis / wheels / cargo</div>`,
+  lights:`${systemsHtml(d?.systems||{},8)}`,
+  shift:`<div style="font-size:31px;text-align:center;font-weight:1000;color:var(--green)">${$('coachAction')?.textContent||'HOLD'}</div><div class="studio-sub">${$('coachDetail')?.textContent||''}</div>`,
+  trip:`<div style="font-size:19px;font-weight:1000">${trip?.cargo||'NO ACTIVE TRIP'}</div><div class="studio-sub">${trip?`${f1(trip.milesDriven||0)} mi • ${f1(trip.fuelUsedGallons||0)} gal • ${fmtDuration(trip.speedingSeconds||0)} speeding`:'Trip logger standby'}</div>`,
+  convoy:`<div style="font-size:21px;font-weight:1000">${c.online||0} ONLINE / ${c.total||0} KNOWN</div><div class="studio-sub">${c.sameRoute||0} on same route</div>`,
+  stats:`<div style="font-size:22px;font-weight:1000">${f1(s.totalMiles||0)} mi</div><div class="studio-sub">${s.deliveredTrips||0} delivered • ${money(s.totalIncome||0)}</div>`,
+  income:`<div class="studio-metric">${money(j.income||0)}</div><div class="studio-sub">CURRENT JOB</div>`,
+  odometer:`<div class="studio-metric">${f1(t.odometerMiles||0)}</div><div class="studio-sub">MILES</div>`,
+  warnings:`<div class="studio-metric">${Object.values(d?.warnings||{}).filter(Boolean).length}</div><div class="studio-sub">ACTIVE WARNINGS</div>`,
+  clock:`<div class="studio-metric" style="font-size:27px">${d?.updatedAt?new Date(d.updatedAt).toLocaleTimeString():'—'}</div><div class="studio-sub">LAST UPDATE</div>`
+ };
+ return maps[id]||'<span class="muted">Widget unavailable</span>'
+}
+let latestTelemetry=null;
+const hoodFields=['Engine','Hp','Torque','Transmission','Brakes','Chassis','Notes'];
+let hoodTruckKey='',hoodProfiles=JSON.parse(localStorage.getItem('kawTruckBuilds')||'{}');
+const privacyFields=['shareIdentity','shareSpecs','shareTrailer','shareCustom','sharePlate','shareLocation','shareSpeed','shareStatus','shareRoute','shareDamage'];
+let hoodPrivacy={shareIdentity:true,shareSpecs:true,shareTrailer:true,shareCustom:false,sharePlate:false,shareLocation:true,shareSpeed:true,shareStatus:true,shareRoute:true,shareDamage:false,...JSON.parse(localStorage.getItem('kawBuildPrivacy')||'{}')},lastUpdateInfo=null;
+const hoodValue=v=>v===null||v===undefined||v===''?'—':String(v);
+const hoodNumber=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
+const safeHtml=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const hoodSpec=(k,v)=>`<div class="hood-spec"><div class="k">${safeHtml(k)}</div><div class="v">${safeHtml(hoodValue(v))}</div></div>`;
+function hoodKey(d){return [d?.truck?.id,d?.truck?.make,d?.truck?.model].filter(Boolean).join('|')||'default'}
+function loadHoodProfile(key){const p=hoodProfiles[key]||{};hoodFields.forEach(x=>{$(`hood${x}`).value=p[x.toLowerCase()]||''})}
+function getHoodProfile(){const p={};hoodFields.forEach(x=>p[x.toLowerCase()]=$(`hood${x}`).value.trim());return p}
+function getHoodPrivacy(){const p={};privacyFields.forEach(x=>p[x]=$(`${x}`).checked);return p}
+async function publishHoodBuild(){try{await fetch('/api/build-profile',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({profile:getHoodProfile(),privacy:getHoodPrivacy()})})}catch{}}
+function buildHoodCard(d,p=getHoodProfile()){
+ const t=d?.truck||{},tr=d?.trailer||{},j=d?.job||{},truck=[t.make,t.model].filter(Boolean).join(' ')||'Truck not detected';
+ const lines=[`WHAT'S UNDER THE HOOD? — ${truck}`,`Engine: ${p.engine||'Not entered'}${p.hp?` • ${p.hp}`:''}${p.torque?` • ${p.torque}`:''}`,`Transmission: ${p.transmission||[t.transmissionType,t.forwardGears?`${t.forwardGears}-speed`:null].filter(Boolean).join(' • ')||'Not entered'}`,`Chassis / suspension: ${p.chassis||'Not entered'}`,`Brakes: ${p.brakes||'Not entered'}`,`Differential ratio: ${hoodNumber(t.differentialRatio)&&Number(t.differentialRatio)>0?Number(t.differentialRatio).toFixed(2):'Not detected'}`,`Fuel capacity: ${hoodNumber(t.fuelCapacityGallons)&&Number(t.fuelCapacityGallons)>0?`${f1(t.fuelCapacityGallons)} gal`:'Not detected'}`,`Truck wheels: ${hoodValue(t.wheelCount)} • Powered: ${hoodValue(t.poweredWheels)} • Steerable: ${hoodValue(t.steerableWheels)} • Liftable: ${hoodValue(t.liftableWheels)}`,`Trailer: ${tr.attached?[tr.brand,tr.name||tr.id].filter(Boolean).join(' ')||'Attached':'None attached'}`];
+ if(tr.attached)lines.push(`Trailer wheels: ${hoodValue(tr.wheelCount)} • Liftable: ${hoodValue(tr.liftableWheels)}`,`Cargo: ${j.cargo||'No active cargo'}`);
+ if(p.notes)lines.push(`Notes: ${p.notes}`);return lines.join('\n')
+}
+function renderHood(d){
+ const t=d?.truck||{},tr=d?.trailer||{},j=d?.job||{},key=hoodKey(d);if(key!==hoodTruckKey){hoodTruckKey=key;loadHoodProfile(key);publishHoodBuild()}
+ $('hoodDetected').textContent=d?.connected?'LIVE DETECTION':'WAITING FOR ATS';$('hoodDetected').className=d?.connected?'good':'warn';
+ $('hoodLiveSpecs').innerHTML=[['Truck',[t.make,t.model].filter(Boolean).join(' ')],['Truck ID',t.id],['License plate',t.licensePlate],['Transmission type',t.transmissionType],['Forward gears',Number(t.forwardGears)>0?t.forwardGears:null],['Reverse gears',Number(t.reverseGears)>0?t.reverseGears:null],['Differential ratio',hoodNumber(t.differentialRatio)&&Number(t.differentialRatio)>0?Number(t.differentialRatio).toFixed(2):null],['RPM limit',hoodNumber(t.rpmMax)&&Number(t.rpmMax)>0?`${f0(t.rpmMax)} RPM`:null],['Fuel capacity',hoodNumber(t.fuelCapacityGallons)&&Number(t.fuelCapacityGallons)>0?`${f1(t.fuelCapacityGallons)} gal`:null],['Retarder',hoodNumber(t.retarderSteps)&&Number(t.retarderSteps)>0?`${t.retarderSteps} steps`:'Not fitted/detected'],['Wheel layout',hoodNumber(t.wheelCount)&&Number(t.wheelCount)>0?`${t.wheelCount} wheels`:null],['Powered / steerable',hoodNumber(t.poweredWheels)||hoodNumber(t.steerableWheels)?`${hoodValue(t.poweredWheels)} / ${hoodValue(t.steerableWheels)}`:null]].map(x=>hoodSpec(...x)).join('');
+ $('hoodTrailerStatus').textContent=tr.attached?'TRAILER ATTACHED':'NO TRAILER';$('hoodTrailerStatus').className=tr.attached?'good':'muted';
+ $('hoodTrailerSpecs').innerHTML=[['Trailer',[tr.brand,tr.name].filter(Boolean).join(' ')||tr.id],['Configuration',tr.chainType],['License plate',tr.licensePlate],['Wheels',Number(tr.wheelCount)>0?tr.wheelCount:null],['Liftable wheels',tr.attached&&hoodNumber(tr.liftableWheels)?tr.liftableWheels:null],['Cargo',j.cargo]].map(x=>hoodSpec(...x)).join('');$('hoodBuildCard').textContent=buildHoodCard(d);renderGarage(d?.convoy)
+}
+$('hoodSave').onclick=async()=>{hoodProfiles[hoodTruckKey||'default']=getHoodProfile();localStorage.setItem('kawTruckBuilds',JSON.stringify(hoodProfiles));await publishHoodBuild();renderHood(latestTelemetry||{});toast('Build saved','Saved for this truck','good')};
+$('hoodClear').onclick=()=>{if(!confirm('Clear the saved build details for this truck?'))return;delete hoodProfiles[hoodTruckKey||'default'];localStorage.setItem('kawTruckBuilds',JSON.stringify(hoodProfiles));loadHoodProfile(hoodTruckKey||'default');renderHood(latestTelemetry||{});toast('Build details cleared')};
+$('hoodCopy').onclick=async()=>{const text=buildHoodCard(latestTelemetry||{});try{await navigator.clipboard.writeText(text);toast('Build card copied','Ready to paste into Discord','good')}catch{prompt('Copy your build card:',text)}};
+$('hoodDownloadCard').onclick=async()=>{const d=latestTelemetry||{},canvas=document.createElement('canvas');canvas.width=1200;canvas.height=675;const c=canvas.getContext('2d'),photo=readTruckPhotos()[truckPhotoKey([d.truck?.make,d.truck?.model].filter(Boolean).join(' '))];c.fillStyle='#020b14';c.fillRect(0,0,1200,675);c.strokeStyle='#168cff';c.lineWidth=8;c.strokeRect(10,10,1180,655);let textX=60;if(photo){try{const img=new Image();await new Promise((ok,bad)=>{img.onload=ok;img.onerror=bad;img.src=photo});const scale=Math.min(500/img.width,420/img.height),w=img.width*scale,h=img.height*scale;c.drawImage(img,650,120,w,h)}catch{}}c.fillStyle='#168cff';c.font='bold 30px Arial';c.fillText("KAW'S ATS PLAYGROUND",textX,65);c.fillStyle='#fff';c.font='bold 42px Arial';c.fillText("WHAT'S UNDER THE HOOD?",textX,120);c.font='24px Arial';buildHoodCard(d).split('\n').forEach((line,i)=>{if(i>10)return;c.fillStyle=i===0?'#39ff88':'#fff';c.font=i===0?'bold 28px Arial':'22px Arial';const max=photo?560:1080;let shown=line;while(c.measureText(shown).width>max&&shown.length>4)shown=shown.slice(0,-4);if(shown!==line)shown+='…';c.fillText(shown,textX,175+i*42)});const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='KAW-ATS-Truck-Build-Card.png';a.click();toast('Picture card created',photo?'Your selected truck photo was included.':'No truck photo was selected, so a text card was created.','good')};
+$('hoodExport').onclick=()=>{const data=JSON.stringify({format:'KAW-Truck-Builds',version:1,exportedAt:new Date().toISOString(),profiles:hoodProfiles,privacy:getHoodPrivacy()},null,2),url=URL.createObjectURL(new Blob([data],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='KAW-ATS-Truck-Builds.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Build backup exported','Check your Downloads folder','good')};
+$('hoodImport').onclick=()=>$('hoodImportFile').click();
+$('hoodImportFile').onchange=async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;try{const data=JSON.parse(await file.text());if(data.format!=='KAW-Truck-Builds'||!data.profiles||typeof data.profiles!=='object')throw new Error('This is not a KAW truck-build backup.');hoodProfiles=data.profiles;localStorage.setItem('kawTruckBuilds',JSON.stringify(hoodProfiles));if(data.privacy&&typeof data.privacy==='object'){hoodPrivacy={...hoodPrivacy,...data.privacy};localStorage.setItem('kawBuildPrivacy',JSON.stringify(hoodPrivacy));privacyFields.forEach(x=>$(`${x}`).checked=!!hoodPrivacy[x])}loadHoodProfile(hoodTruckKey||'default');await publishHoodBuild();renderHood(latestTelemetry||{});toast('Build backup imported',`${Object.keys(hoodProfiles).length} truck profile(s) restored`,'good')}catch(error){toast('Import failed',error.message,'critical')}};
+function renderGarage(convoy){const roster=(convoy?.roster||[]).filter(x=>!x.isLocal&&x.online&&(Object.keys(x.buildProfile||{}).length||Object.keys(x.truck||{}).length||Object.keys(x.trailer||{}).length));$('garageCount').textContent=`${roster.length} SHARED BUILD${roster.length===1?'':'S'}`;$('garageGrid').innerHTML=roster.length?roster.map(x=>{const t=x.truck||{},tr=x.trailer||{},p=x.buildProfile||{},truck=[t.make,t.model].filter(Boolean).join(' ')||'Truck details private';return `<div class="garage-card"><h3>${safeHtml(x.driverName||'Driver')}</h3><div class="garage-line"><b>${safeHtml(truck)}</b></div><div class="garage-line">Engine: ${safeHtml(p.engine||'Private / not entered')}${p.hp?` • ${safeHtml(p.hp)}`:''}</div><div class="garage-line">Transmission: ${safeHtml(p.transmission||[t.transmissionType,t.forwardGears?`${t.forwardGears}-speed`:null].filter(Boolean).join(' • ')||'Private / not detected')}</div><div class="garage-line">Brakes: ${safeHtml(p.brakes||'Private / not entered')}</div><div class="garage-line">Trailer: ${safeHtml(tr.attached?[tr.brand,tr.name||tr.id].filter(Boolean).join(' ')||'Attached':'None')}</div>${p.notes?`<div class="garage-line muted">${safeHtml(p.notes)}</div>`:''}</div>`}).join(''):'<div class="muted">No shared convoy builds are online yet.</div>'}
+async function checkForUpdate(force=false){$('updateState').textContent='CHECKING…';$('updateState').className='update-state';try{const r=await fetch(`/api/update${force?'?force=1':''}`,{cache:'no-store'}),u=await r.json();if(!r.ok)throw new Error(u.error||'Update check failed');lastUpdateInfo=u;$('updateState').textContent=u.updateAvailable?`v${u.latestVersion} AVAILABLE`:`UP TO DATE • v${u.currentVersion}`;$('updateState').className=`update-state ${u.updateAvailable?'warn':'good'}`;$('updateDetail').textContent=u.updateAvailable?`A newer official release is ready. Download it, close ATS, and run the installer over your current copy.`:`You have the newest official release checked on GitHub.`;$('updateDownload').style.display=u.updateAvailable?'inline-flex':'none';$('updateDownload').href=u.downloadUrl||u.releaseUrl;renderDiagnostics()}catch(e){$('updateState').textContent='CHECK FAILED';$('updateState').className='update-state bad';$('updateDetail').textContent=`Could not reach the official release page: ${e.message}`;renderDiagnostics()}}
+function diagnosticText(){const d=latestTelemetry||{},u=lastUpdateInfo;return [`KAW ATS COMPANION DIAGNOSTICS`,`Companion: v1.7.2`,`Latest release: ${u?.latestVersion?`v${u.latestVersion}`:'Not checked'}`,`Update available: ${u?u.updateAvailable?'Yes':'No':'Not checked'}`,`Dashboard: ${location.origin}`,`Telemetry: ${d.connected?'Connected':'Waiting / offline'}`,`Game: ${d.game||'Not detected'}`,`Truck: ${[d.truck?.make,d.truck?.model].filter(Boolean).join(' ')||'Not detected'}`,`SDK active: ${d.sdk?.active?'Yes':'No'}`,`SDK plugin revision: ${hoodValue(d.sdk?.pluginRevision)}`,`Last telemetry: ${d.updatedAt||'None'}`,`Convoy drivers: ${d.convoy?.online||0} online`,`Browser: ${navigator.userAgent}`,`Generated: ${new Date().toISOString()}`,`Secrets included: No`].join('\n')}
+function renderDiagnostics(){$('diagnosticBox').textContent=diagnosticText()}
+$('checkUpdate').onclick=()=>checkForUpdate(true);$('copyDiagnostics').onclick=async()=>{const text=diagnosticText();try{await navigator.clipboard.writeText(text);toast('Diagnostics copied','Ready to paste into companion support','good')}catch{prompt('Copy diagnostics:',text)}};
+privacyFields.forEach(x=>{$(`${x}`).checked=!!hoodPrivacy[x];$(`${x}`).onchange=async()=>{hoodPrivacy=getHoodPrivacy();localStorage.setItem('kawBuildPrivacy',JSON.stringify(hoodPrivacy));await publishHoodBuild();toast('Privacy updated','New convoy sharing choice is active','good')}});
+hoodFields.forEach(x=>$(`hood${x}`).oninput=()=>{$('hoodBuildCard').textContent=buildHoodCard(latestTelemetry||{})});renderHood({});renderDiagnostics();checkForUpdate();setInterval(checkForUpdate,6*60*60*1000);
+const TRUCK_PHOTO_STORE='kawTruckPhotosV1';
+let currentTruckPhotoKey='';
+function truckPhotoKey(name){return String(name||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function readTruckPhotos(){try{return JSON.parse(localStorage.getItem(TRUCK_PHOTO_STORE)||'{}')}catch{return {}}}
+function renderTruckPhoto(truckName){
+  currentTruckPhotoKey=truckPhotoKey(truckName);
+  const photo=currentTruckPhotoKey?readTruckPhotos()[currentTruckPhotoKey]:null,img=$('truckPhoto'),empty=$('truckPhotoEmpty');
+  if(photo){img.src=photo;img.classList.add('has-photo');img.alt=`Your ${truckName}`;empty.hidden=true;$('removeTruckPhoto').disabled=false}
+  else{img.removeAttribute('src');img.classList.remove('has-photo');img.alt='';empty.hidden=false;empty.textContent=currentTruckPhotoKey?'No photo selected for this truck.':'Connect ATS to select a truck photo.';$('removeTruckPhoto').disabled=true}
+  $('chooseTruckPhoto').disabled=!currentTruckPhotoKey;
+}
+function resizeTruckPhoto(file){
+  return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(new Error('Could not read that image.'));reader.onload=()=>{const image=new Image();image.onerror=()=>reject(new Error('That image format could not be opened.'));image.onload=()=>{const maxW=960,maxH=540,scale=Math.min(1,maxW/image.width,maxH/image.height),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',.84))};image.src=reader.result};reader.readAsDataURL(file)})
+}
+$('chooseTruckPhoto').onclick=()=>$('truckPhotoInput').click();
+$('truckPhotoInput').onchange=async event=>{const file=event.target.files?.[0];event.target.value='';if(!file||!currentTruckPhotoKey)return;try{const photos=readTruckPhotos();photos[currentTruckPhotoKey]=await resizeTruckPhoto(file);localStorage.setItem(TRUCK_PHOTO_STORE,JSON.stringify(photos));renderTruckPhoto($('truckName').textContent);toast('Truck photo saved','This photo will appear only for this truck model.','join')}catch(error){toast('Photo not saved',error.name==='QuotaExceededError'?'Browser storage is full. Try a smaller photo.':error.message,'critical')}};
+$('removeTruckPhoto').onclick=()=>{if(!currentTruckPhotoKey)return;const photos=readTruckPhotos();delete photos[currentTruckPhotoKey];localStorage.setItem(TRUCK_PHOTO_STORE,JSON.stringify(photos));renderTruckPhoto($('truckName').textContent);toast('Truck photo removed','The correct make and model will still be shown.')};
+renderTruckPhoto('');
+function renderCanvas(){
+ const name=currentLayoutName(),layout=studioData.layouts[name],canvas=$('dashboardCanvas');if(!canvas||!layout)return;
+ if(!layout.widgets.length){canvas.innerHTML='<div class="empty-canvas"><b>Your dashboard is empty</b>Choose widgets from the library.</div>';return}
+ canvas.innerHTML=layout.widgets.map((x,i)=>`<div class="studio-widget" draggable="true" data-key="${x.key}" data-index="${i}" style="grid-column:span ${Math.max(2,Math.min(12,x.w||3))};grid-row:span ${Math.max(1,Math.min(8,x.h||2))}"><div class="studio-widget-head"><div class="studio-widget-title">${widgetCatalog[x.id]?.title||x.id}</div><div class="studio-widget-actions"><button data-small="${x.key}" title="Smaller">−</button><button data-large="${x.key}" title="Larger">+</button><button data-remove="${x.key}" title="Remove">×</button></div></div><div class="studio-widget-body">${widgetInner(x.id,latestTelemetry||{})}</div><div class="resize-handle"></div></div>`).join('');
+ document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=e=>{e.stopPropagation();layout.widgets=layout.widgets.filter(x=>x.key!==b.dataset.remove);saveStudio();renderCanvas()});
+ document.querySelectorAll('[data-large]').forEach(b=>b.onclick=e=>{e.stopPropagation();const x=layout.widgets.find(x=>x.key===b.dataset.large);if(x){x.w=Math.min(12,(x.w||3)+1);x.h=Math.min(8,(x.h||2)+1);saveStudio();renderCanvas()}});
+ document.querySelectorAll('[data-small]').forEach(b=>b.onclick=e=>{e.stopPropagation();const x=layout.widgets.find(x=>x.key===b.dataset.small);if(x){x.w=Math.max(2,(x.w||3)-1);x.h=Math.max(1,(x.h||2)-1);saveStudio();renderCanvas()}});
+ let dragKey=null;
+ document.querySelectorAll('.studio-widget').forEach(el=>{el.ondragstart=()=>{dragKey=el.dataset.key;el.classList.add('dragging')};el.ondragend=()=>el.classList.remove('dragging');el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();const target=el.dataset.key;if(!dragKey||dragKey===target)return;const a=layout.widgets.findIndex(x=>x.key===dragKey),b=layout.widgets.findIndex(x=>x.key===target);const [m]=layout.widgets.splice(a,1);layout.widgets.splice(b,0,m);saveStudio();renderCanvas()}})
+}
+function addWidget(id){const layout=studioData.layouts[currentLayoutName()];const d=widgetCatalog[id];layout.widgets.push({id,key:`${id}-${Date.now()}-${Math.random().toString(36).slice(2,5)}`,w:d.w,h:d.h});saveStudio();renderCanvas()}
+function createLayout(name,widgets=[]){name=(name||'New Dashboard').trim();let base=name,i=2;while(studioData.layouts[name])name=`${base} ${i++}`;studioData.layouts[name]={widgets};saveStudio();renderLayoutSelect();$('layoutSelect').value=name;renderCanvas()}
+loadStudio();renderLayoutSelect();renderWidgetLibrary();renderCanvas();
+$('layoutSelect').onchange=renderCanvas;$('widgetSearch').oninput=e=>renderWidgetLibrary(e.target.value);
+$('newLayoutBtn').onclick=()=>createLayout(prompt('Dashboard name:','My Dashboard')||'My Dashboard',[]);
+$('cloneLayoutBtn').onclick=()=>{const cur=studioData.layouts[currentLayoutName()];createLayout(`${currentLayoutName()} Copy`,JSON.parse(JSON.stringify(cur.widgets)).map(x=>({...x,key:`${x.id}-${Date.now()}-${Math.random().toString(36).slice(2,5)}`})))};
+$('renameLayoutBtn').onclick=()=>{const old=currentLayoutName(),name=(prompt('New name:',old)||old).trim();if(name===old||studioData.layouts[name])return;studioData.layouts[name]=studioData.layouts[old];delete studioData.layouts[old];if(studioData.active===old)studioData.active=name;saveStudio();renderLayoutSelect();$('layoutSelect').value=name;renderCanvas()};
+$('saveLayoutBtn').onclick=()=>{saveStudio();toast('Dashboard saved',currentLayoutName(),'join')};
+$('setActiveLayoutBtn').onclick=()=>{studioData.active=currentLayoutName();saveStudio();toast('Active dashboard changed',studioData.active,'join')};
+$('deleteLayoutBtn').onclick=()=>{const n=currentLayoutName();if(Object.keys(studioData.layouts).length<=1)return toast('Cannot delete','Keep at least one dashboard','critical');if(confirm(`Delete "${n}"?`)){delete studioData.layouts[n];if(studioData.active===n)studioData.active=Object.keys(studioData.layouts)[0];saveStudio();renderLayoutSelect();renderCanvas()}};
+$('exportLayoutBtn').onclick=()=>{const n=currentLayoutName(),data=JSON.stringify({name:n,layout:studioData.layouts[n]},null,2);navigator.clipboard?.writeText(data);prompt('Copy this layout JSON:',data)};
+$('importLayoutBtn').onclick=()=>{const raw=prompt('Paste exported layout JSON:');if(!raw)return;try{const x=JSON.parse(raw);createLayout(x.name||'Imported Dashboard',Array.isArray(x.layout?.widgets)?x.layout.widgets:[])}catch{toast('Import failed','Invalid layout JSON','critical')}};
+document.querySelectorAll('.preset-btn').forEach(b=>b.onclick=()=>{const ids=presetLayouts[b.dataset.preset]||[];createLayout(b.textContent.trim(),ids.map((id,i)=>({id,key:`${id}-${Date.now()}-${i}`,w:widgetCatalog[id].w,h:widgetCatalog[id].h})))});
+
+// Command Center
+async function runCompanionAction(action){
+ let text='';
+ try{
+  if(action==='current'){const r=await fetch('/api/trip/current'),t=await r.json();text=t?`ACTIVE TRIP\nCargo: ${t.cargo||'—'}\nRoute: ${t.originCity||'?'} → ${t.destinationCity||'?'}\nMiles: ${f1(t.milesDriven||0)}\nFuel: ${f1(t.fuelUsedGallons||0)} gal\nMax speed: ${f0(t.maxSpeedMph||0)} MPH`:'No active trip.'}
+  else if(action==='stats'){const r=await fetch('/api/trip/stats'),s=await r.json();text=`DRIVER STATS\nTrips: ${s.totalTrips||0}\nDelivered: ${s.deliveredTrips||0}\nMiles: ${f1(s.totalMiles||0)}\nIncome: ${money(s.totalIncome||0)}\nFuel: ${f1(s.totalFuelUsedGallons||0)} gal`}
+  else if(action==='trips'){const r=await fetch('/api/trips?limit=5'),a=await r.json();text=a.length?a.map((t,i)=>`${i+1}. ${String(t.status||'').toUpperCase()} • ${t.cargo||'—'} • ${t.originCity||'?'} → ${t.destinationCity||'?'} • ${f1(t.milesDriven||0)} mi`).join('\n'):'No trips recorded.'}
+  else if(action==='convoy'){const r=await fetch('/api/convoy'),c=await r.json();text=`CONVOY\nKnown: ${c.total||0}\nOnline: ${c.online||0}\nSame route: ${c.sameRoute||0}\n\n${(c.roster||[]).map(p=>`${p.driverName}${p.isLocal?' (YOU)':''} • ${p.online?'ONLINE':'OFFLINE'} • ${p.relation||'—'}`).join('\n')}`}
+  else if(action==='truck'){const d=latestTelemetry||{};text=`TRUCK\n${[d.truck?.make,d.truck?.model].filter(Boolean).join(' ')||'—'}\nSpeed: ${f1(d.truck?.speedMph||0)} MPH\nRPM: ${f0(d.truck?.rpm||0)}\nFuel: ${f1(d.truck?.fuelGallons||0)} gal\nOdometer: ${f1(d.truck?.odometerMiles||0)} mi\nWarnings: ${Object.values(d.warnings||{}).filter(Boolean).length}`}
+  else text=`PLAYGROUND COMMANDS\n/ats current — active trip\n/ats stats — driver stats\n/ats trips — recent trips\n/ats convoy — convoy status\n/ats truck — live truck\n/ats help — command list\n\nThese currently run locally in the Companion. The hosted/shared backend phase will let these call the same core used by Discord.`;
+ }catch(e){text=`Command failed: ${e.message}`}
+ $('commandOutput').textContent=text
+}
+document.querySelectorAll('[data-action]').forEach(x=>x.onclick=()=>runCompanionAction(x.dataset.action));
+
+
+// ---------------- Convoy Intelligence v0.6 ----------------
+const plannerStates=['California','Nevada','Arizona','New Mexico','Oregon','Washington','Utah','Idaho','Colorado','Wyoming','Montana','Texas','Oklahoma','Kansas','Nebraska','Arkansas','Missouri','Iowa','Louisiana','Illinois'];
+$('routeOrigin').innerHTML=plannerStates.map(x=>`<option>${x}</option>`).join('');
+$('routeDestination').innerHTML=plannerStates.map(x=>`<option>${x}</option>`).join('');
+$('routeOrigin').value='Arizona';$('routeDestination').value='Colorado';
+
+async function loadIntelligence(){
+ try{
+  const [sr,rr]=await Promise.all([fetch('/api/intelligence/scan',{cache:'no-store'}),fetch('/api/intelligence/readiness',{cache:'no-store'})]);
+  const scan=await sr.json(),ready=await rr.json();
+  $('intelMapDlcCount').textContent=scan?.dlc?.map?.length||0;
+  $('intelModCount').textContent=scan?.mods?.local?.mods?.length||0;
+  $('intelWorkshopCount').textContent=scan?.mods?.workshop?.items?.length||0;
+  const base=(scan?.dlc?.baseStates||[]).map(s=>`<span class="dlc-chip base">${s} • BASE</span>`).join('');
+  const dlc=(scan?.dlc?.map||[]).map(x=>`<span class="dlc-chip good">${x.state}</span>`).join('');
+  $('dlcChips').innerHTML=base+dlc+(scan?.dlc?.other?.length?`<span class="dlc-chip">${scan.dlc.other.length} other DLC files</span>`:'');
+  const mods=scan?.mods?.local?.mods||[];
+  $('modList').innerHTML=mods.length?mods.slice(0,100).map(m=>`<div class="mod-row"><span>${m.name}</span><span class="muted">${m.type}</span></div>`).join(''):'<div class="muted">No local mod files found in the Documents mod folder.</div>';
+  $('activeModInfo').textContent=scan?.mods?.activeProfile?.file?`${scan.mods.activeProfile.activeCount||0} active references found`:'No mod_manager.sii found';
+  const checks=[
+   ['Drivers online',ready.onlineDrivers>0,`${ready.onlineDrivers||0}`],
+   ['Game version match',ready.gameVersionMatch,ready.gameVersions?.join(', ')||scan.gameVersion||'Unknown'],
+   ['Shared map area',Array.isArray(ready.commonMapStates)&&ready.commonMapStates.length>0,`${ready.commonMapStates?.length||0} common states`],
+   ['Local map DLC scan',true,`${ready.localMapDlcCount||0} map DLC`],
+   ['Local mod scan',true,`${ready.localMods||0} local / ${ready.localWorkshopMods||0} workshop`]
+  ];
+  $('readinessList').innerHTML=checks.map(([k,ok,v])=>`<div class="ready-item"><span>${k}</span><span class="status ${ok?'good':'warn'}">${ok?'✓':'⚠'} ${v}</span></div>`).join('');
+  $('readyOverall').textContent=checks.every(x=>x[1])?'READY':'CHECK REQUIRED';$('readyOverall').className=checks.every(x=>x[1])?'good':'warn';
+ }catch(e){$('readinessList').innerHTML=`<div class="bad">Scanner error: ${e.message}</div>`}
+}
+$('rescanIntelBtn').onclick=async()=>{await fetch('/api/intelligence/rescan',{method:'POST'});toast('Intelligence scan complete','DLC/mod inventory refreshed','join');loadIntelligence()};
+$('planRouteBtn').onclick=async()=>{
+ try{
+  const o=encodeURIComponent($('routeOrigin').value),d=encodeURIComponent($('routeDestination').value),r=await fetch(`/api/intelligence/route?origin=${o}&destination=${d}`,{cache:'no-store'}),x=await r.json();
+  if(!x.path){$('routeIntelResult').innerHTML=`<span class="bad">${x.reason||'No compatibility path found.'}</span>`;return}
+  const missing=x.drivers?.filter(v=>!v.compatible)||[];
+  $('routeIntelResult').innerHTML=`<div class="path-line">${x.path.join(' → ')}</div><div style="margin-top:7px"><b>${x.compatibleDrivers}/${x.totalDrivers}</b> online drivers compatible • Required DLC: ${x.requiredDlc?.length?x.requiredDlc.map(y=>y.state).join(', '):'Base map only'}</div>${missing.length?`<div class="missing-list">${missing.map(v=>`${v.driverName}: missing ${v.missing.map(m=>m.state).join(', ')}`).join('<br>')}</div>`:'<div class="good" style="margin-top:8px">✓ Everyone currently online is compatible with this estimated path.</div>'}`;
+ }catch(e){$('routeIntelResult').textContent=e.message}
+};
+async function loadTruckAdvice(){
+ try{
+  const hp=Number($('truckHp').value)||500,ax=$('truckDrivenAxles').value,tr=$('truckTrans').value,r=await fetch(`/api/intelligence/truck-load?hp=${hp}&drivenAxles=${ax}&transmission=${tr}`,{cache:'no-store'}),x=await r.json();
+  $('loadScore').textContent=Number.isFinite(Number(x.score))?`${x.score}/100`:'—';$('loadRating').textContent=x.rating||'—';$('loadClass').textContent=x.loadClass||'—';$('loadCargo').textContent=x.cargo?`${x.cargo}${x.cargoMassKg?` • ${f0(x.cargoMassKg)} kg`:''}`:'No active cargo';
+  $('loadRating').style.color=x.rating==='EXCELLENT'?'var(--green)':x.rating==='GOOD'?'var(--blue)':x.rating==='MARGINAL'?'var(--yellow)':'var(--red)';
+  $('loadNotes').innerHTML=(x.notes||[]).map(n=>`<div class="load-note">${n}</div>`).join('');
+ }catch(e){$('loadNotes').innerHTML=`<div class="bad">${e.message}</div>`}
+}
+$('loadAdviceBtn').onclick=loadTruckAdvice;
+setInterval(loadIntelligence,30000);loadIntelligence();loadTruckAdvice();
+
+async function tick(){
+  try{
+    const r=await fetch('/api/telemetry',{cache:'no-store'}),d=await r.json();latestTelemetry=d;renderCanvas();renderPopout(d);const now=performance.now(),hz=1000/Math.max(1,now-lastFetch);lastFetch=now;emaHz=emaHz?emaHz*.82+hz*.18:hz;
+    const connected=!!d.connected;$('topStatus').textContent=connected?'CONNECTED':'WAITING';$('sideConnection').textContent=connected?'CONNECTED':'OFFLINE';$('sideConnection').style.color=connected?'var(--green)':'var(--red)';$('topDot').style.background=connected?'var(--green)':'var(--red)';$('topHz').textContent=connected?`${Math.max(1,Math.round(emaHz))} Hz`:'— Hz';$('driveConnect').textContent=connected?'ATS TELEMETRY CONNECTED':'WAITING FOR ATS';
+    const truck=[d.truck?.make,d.truck?.model].filter(Boolean).join(' ')||'—';$('driveTruck').textContent=truck;$('truckName').textContent=truck;if(truckPhotoKey(truck)!==currentTruckPhotoKey)renderTruckPhoto(truck==='—'?'':truck);$('speed').textContent=f1(d.truck?.speedMph||0);$('rpm').textContent=f0(d.truck?.rpm||0);$('fuel').textContent=f1(d.truck?.fuelGallons||0);$('gear').textContent=d.truck?.displayedGear??d.truck?.gear??'—';$('speedGauge').style.setProperty('--gauge-value',Math.max(0,Math.min(100,Number(d.truck?.speedMph||0))));$('rpmGauge').style.setProperty('--gauge-value',Math.max(0,Math.min(100,Number(d.truck?.rpm||0)/25)));
+    const fp=(Number(d.truck?.fuelCapacityGallons)>0)?Math.max(0,Math.min(100,Number(d.truck?.fuelGallons||0)/Number(d.truck?.fuelCapacityGallons)*100)):0;$('fuelBar').style.width=`${fp}%`;$('fuelGauge').style.setProperty('--gauge-value',fp);
+    const route=(d.job?.originCity&&d.job?.destinationCity)?`${d.job.originCity} → ${d.job.destinationCity}`:'—';$('driveRoute').textContent=route;$('driveNav').textContent=`${f1(d.navigation?.distanceMiles||0)} mi`;$('driveIncome').textContent=money(d.job?.income||0);
+    const t=d.trip;$('driveTripStatus').textContent=t?'RECORDING':'STANDBY';$('tripCargo').textContent=t?.cargo||'—';$('tripRoute').textContent=t&&t.originCity&&t.destinationCity?`${t.originCity} → ${t.destinationCity}`:'—';$('tripMiles').textContent=`${f1(t?.milesDriven||0)} mi`;$('tripFuel').textContent=`${f1(t?.fuelUsedGallons||0)} gal`;$('tripMax').textContent=`${f0(t?.maxSpeedMph||0)} MPH`;$('tripSpeeding').textContent=fmtDuration(t?.speedingSeconds||0);$('tripElapsedTop').textContent=t?.startedAt?fmtDuration((Date.now()-new Date(t.startedAt))/1000):'0:00';
+    $('quickSystems').innerHTML=systemsHtml(d.systems||{},8);$('systemsGrid').innerHTML=systemsHtml(d.systems||{});renderDamage(d.damage||{});renderInstruments(d.instruments||{},d.warnings||{},d.truck||{});$('cabFuelRange').textContent=finite(d.truck?.fuelRangeMiles)?`${f0(d.truck.fuelRangeMiles)} mi`:'—';$('cabRestDue').textContent=finite(d.navigation?.restStopMinutes)?fmtEta(Number(d.navigation.restStopMinutes)*60):'—';const maxDamage=Math.max(...Object.values(d.damage||{}).map(Number).filter(Number.isFinite),0);$('cabRepair').textContent=maxDamage<5?'HEALTHY':maxDamage<15?'MONITOR':maxDamage<35?'SERVICE SOON':'REPAIR NOW';$('cabRepair').style.color=damageColor(maxDamage);drawRouteTrace(d.positioning||{},d);
+    const p=Math.max(0,Math.min(100,Number(d.navigation?.progressPercent)||0));$('navProgress').textContent=d.navigation?.progressPercent==null?'—':`${p.toFixed(1)}%`;$('navProgressBar').style.width=`${p}%`;$('navRemaining').textContent=`${f1(d.navigation?.distanceMiles||0)} mi`;$('navEta').textContent=d.navigation?.etaSeconds==null?'—':fmtEta(d.navigation.etaSeconds);$('navLimit').textContent=`${f0(d.navigation?.speedLimitMph||0)} MPH`;$('navDeadline').textContent=finite(d.navigation?.deadlineMinutesRemaining)?fmtEta(Number(d.navigation.deadlineMinutesRemaining)*60):'—';
+    renderConvoy(d.convoy||{});renderRadar(d);renderNavCopilot(d);renderCoach(d.truck||{});renderStats(d.tripStats||{},d.truck||{});renderHood(d);renderDiagnostics();
+  }catch(e){$('topStatus').textContent='OFFLINE';$('sideConnection').textContent='OFFLINE'}
+}
+let telemetryLoop=null;function restartTelemetryLoop(){if(telemetryLoop)clearInterval(telemetryLoop);telemetryLoop=setInterval(tick,1000/(Number(prefs.navRefreshRate)||5))}restartTelemetryLoop();tick();
+if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+</script>
+<script src="/app-v16.js" defer></script>
+<script src="/vendor/qrcode.min.js" defer></script>
+<script src="/app-devices.js" defer></script>
+<script src="/app-system.js" defer></script>
+<script src="/livery/livery-core.js" defer></script>
+<script src="/livery/livery-render.js" defer></script>
+<script src="/app-livery.js" defer></script>
+<script src="/app-planner.js" defer></script>
+<script src="/app-formation.js" defer></script>
+<script src="/app-photo.js" defer></script>
+<script src="/setupcard-core.js" defer></script>
+<script src="/app-setupcard.js" defer></script>
+<script src="/app-replay.js" defer></script>
+<script src="/app-money.js" defer></script>
+<script src="/app-mapcheck.js" defer></script>
+<script src="/app-badges.js" defer></script>
+<script src="/jarvis-voice.js" defer></script>
+<script src="/app-jarvis.js?v=shared-voices-1" defer></script>
+<script src="/app-help.js" defer></script>
+<script src="/app-convoycheck.js" defer></script>
+<script src="/app-together.js" defer></script>
+<script src="/app-disclaimer.js" defer></script>
+<script src="/app-radiodj.js" defer></script>
+<script src="/app-display.js" defer></script>
+<script src="/app-calendar.js" defer></script>
+<script src="/app-h2h.js" defer></script>
+<script src="/app-hub.js" defer></script>
+<script src="/app-extras.js" defer></script>
+<script src="/speed-warning.js" defer></script>
+<script src="/app-voice.js?v=spoken-text-1" defer></script>
+<script src="/app-map.js" defer></script>
+<script src="/app-stream.js" defer></script>
+<script src="/app-mixer.js" defer></script>
+<script src="/app-fun.js" defer></script>
+</body>
+</html>
+
