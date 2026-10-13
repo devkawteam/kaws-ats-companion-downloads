@@ -6,11 +6,15 @@ $previousPath = $env:PATH
 $legacy = Join-Path $env:LOCALAPPDATA 'KAW-ATS-Companion'
 if (Test-Path $legacy) { throw 'Smoke tests require a clean Windows runner, not a driver PC.' }
 if (Test-Path $TestRoot) { throw 'Smoke-test destination must be empty.' }
+New-Item -ItemType Directory $TestRoot | Out-Null
 
 function Install-To([string]$Destination) {
   $log = "$Destination-install.log"
   $process = Start-Process $Setup -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TASKS=`"`" /DIR=`"$Destination`" /LOG=`"$log`"" -Wait -PassThru
-  if ($process.ExitCode -ne 0) { Get-Content $log; throw "Installer failed: $($process.ExitCode)" }
+  if ($process.ExitCode -ne 0) {
+    if (Test-Path $log) { Get-Content $log }
+    throw "Installer failed: $($process.ExitCode)"
+  }
 }
 function Stop-TestCompanion([string]$Destination) {
   Get-CimInstance Win32_Process | Where-Object {
