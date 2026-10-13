@@ -65,9 +65,9 @@ try {
   if ($LASTEXITCODE -ne 0) { throw 'Native Windows dependency installation failed.' }
   & $node -e "require('trucksim-telemetry'); console.log('Bundled native telemetry module loads')"
   if ($LASTEXITCODE -ne 0) { throw 'Bundled telemetry module failed to load.' }
-  $testFiles = @(Get-ChildItem 'tests/*.test.js' | ForEach-Object { $_.FullName })
+  $testFiles = @(Get-Content (Join-Path $PSScriptRoot 'windows-tests.txt') | Where-Object { $_.Trim() } | ForEach-Object { Join-Path $app ('tests\' + $_.Trim()) })
   if (!$testFiles.Count) { throw 'No Companion tests found.' }
-  & $node --test @testFiles
+  & $node --test --test-reporter=spec @testFiles
   if ($LASTEXITCODE -ne 0) { throw 'Companion Windows tests failed.' }
 } finally { Pop-Location; $env:PATH = $previousPath }
 

@@ -6,7 +6,7 @@ Includes the CB relay fix: blank main relay addresses are repaired, and Settings
 
 Close the Companion and ATS before installing. Native installer upgrades preserve configuration and data. For script installer users, settings and data are copied from `%LOCALAPPDATA%\KAW-ATS-Companion` if the native installation has no existing config. Remove the old script installer's startup shortcut to avoid starting two copies.
 
-The Windows build passed the Companion test suite and installed-app smoke checks with system Node.js, npm and Python removed from PATH. Checks verify the private runtime, prebuilt native module, dashboard, CB settings controls, preservation of native settings/data, and migration of script-installer settings/data and relay keys.
+The Windows build passed the standalone Companion tests and installed-app smoke checks with system Node.js, npm and Python removed from PATH. Checks verify the private runtime, prebuilt native module, dashboard, CB settings controls, preservation of native settings/data, and migration of script-installer settings/data and relay keys.
 
 Actual ATS game telemetry and the hosted relay were not tested on the runner. Online CB needs a running relay and any required key. This installer is not code signed.
 

@@ -8,7 +8,7 @@ The script verifies the official v1.6.1 native installer against its pinned
 SHA-256 and retains only its launcher, icon and telemetry plugin. It downloads
 Node.js 22.23.3 from nodejs.org and verifies the official archive checksum.
 It installs the locked Companion dependency on Windows using that same Node
-runtime, loads the native module, runs the Companion suite, and compiles the
+runtime, loads the native module, runs the standalone Companion tests listed in `windows-tests.txt`, and compiles the
 Inno Setup installer. No local config, keys, trip data or logs are packaged.
 `dist` contains Setup.exe, its checksum and a build provenance manifest.
 
@@ -25,3 +25,7 @@ The downloads repository's Windows installer workflow builds this source at an
 exact commit, runs these checks, then attaches the tested executable and
 checksum to the GitHub release. Live ATS telemetry requires ATS on a driver
 PC and is not covered by the runner. The executable is not code signed.
+
+The complete source-repository suite also includes bot, knowledge service and relay
+tests. Those components are not shipped or exported in this build context. Run
+`npm test` in the complete source checkout for cross-component coverage.
